@@ -76,15 +76,13 @@
 =========================================================================
 - vi commands in Solaris 11:
 
-h -> move cursor left
-j -> move cursor down
-k -> move cursor up
-l -> move cursor right
-
-o -> add new line below current line
-
-i -> insert characetr to the left of cursor
-x -> delete the character at the cursor
+h -> move cursor left \
+j -> move cursor down \
+k -> move cursor up \
+l -> move cursor right \
+o -> add new line below current line \
+i -> insert characetr to the left of cursor \
+x -> delete the character at the cursor \
 
 =========================================================================
 -------------------------------------------------------------------------
