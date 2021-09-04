@@ -82,7 +82,7 @@ k -> move cursor up \
 l -> move cursor right \
 o -> add new line below current line \
 i -> insert characetr to the left of cursor \
-x -> delete the character at the cursor \
+x -> delete the character at the cursor
 
 =========================================================================
 -------------------------------------------------------------------------
