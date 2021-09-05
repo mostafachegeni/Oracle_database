@@ -84,7 +84,7 @@ SQL> alter pluggable database pdb_plug_move open;
 -------------------------------------------------------------------------------------------------
 2. Creation of a PDB by Cloning a "PDB" or "Non-CDB(12cR1 and later)":
 - 	You can use the CREATE PLUGGABLE DATABASE statement to clone a source PDB or non-CDB and plug 
-- 		the clone into the CDB.
+- 	the clone into the CDB.
 - (The source can be a PDB in a local or remote CDB, 
 -	or starting in Oracle Database 12c Release 1 (12.1.0.2), it can also be a remote non-CDB. )
 
@@ -243,7 +243,7 @@ SQL> SELECT status, refresh_mode FROM dba_pdbs WHERE  pdb_name = 'PDB5_RO';
 STATUS     REFRES
 ---------- ------
 REFRESHING MANUAL
-
+```
 
 ------------------------------------------------------------------------------------------------------
 - 2. Refresh a Refreshable PDB:
