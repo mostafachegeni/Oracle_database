@@ -30,14 +30,9 @@ BEGIN
                                 AND a.table_name=b.SEGMENT_NAME
                                 AND a.index_partition_name=b.partition_name
                         WHERE   b.POPULATE_STATUS IS NULL 
-                            AND (a.table_name like ( 'TBL_%' ) AND a.table_name != 'TBL_PGW')
+                            AND (a.table_name like ( 'TBL_%' ) AND a.table_name != 'TBL_NEW')
                             and SCHEMA.partition_hv_to_date(a.owner, a.table_name, a.index_partition_name) <> trunc(sysdate+1)
-                            and NOT(
-                                 (a.owner='SCHEMA' and a.table_name in('TBL_CBS_DATA_REJECT_PRE','TBL_CBS_DATA_REJECT_POST','TBL_VGS') and SCHEMA.partition_hv_to_date(a.owner, a.table_name, a.index_partition_name)<=trunc(sysdate+1-15)  ) OR 
-                                 (a.owner='SCHEMA' and a.table_name in('TBL_VGS_PHL','TBL_VGS_KISH','TBL_PGW')                         and SCHEMA.partition_hv_to_date(a.owner, a.table_name, a.index_partition_name)<=trunc(sysdate+1-15)  ) OR 
-                                 (a.owner='SCHEMA' and a.table_name in('TBL_CBS_DATA_PRE','TBL_CBS_DATA_POST')                         and SCHEMA.partition_hv_to_date(a.owner, a.table_name, a.index_partition_name)<=trunc(sysdate+1-15) ) OR 
-                                 (a.owner='SCHEMA' and a.table_name in('TBL_MOBINNET')                                                 and SCHEMA.partition_hv_to_date(a.owner, a.table_name, a.index_partition_name)<=trunc(sysdate+1-15) )    
-                            )
+                            
                  )
     loop
         Begin 
@@ -45,6 +40,8 @@ BEGIN
             EXECUTE IMMEDIATE stmt;
         EXCEPTION   
             when others then 
+
+                --store the error in the table "TABLE_JOBS_ERR_LOG":
                 v_err_code := SQLCODE;
                 v_err_msg  := SUBSTR(SQLERRM, 1, 4000);
                 select user into v_username from dual;
