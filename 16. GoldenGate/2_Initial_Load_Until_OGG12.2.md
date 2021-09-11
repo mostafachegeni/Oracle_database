@@ -1,11 +1,9 @@
-# Initial Load Until OGG12.2
-=============================================================
--------------------------------------------------------------
-=============================================================
-- Initial Load [For OGG Versions Prior to 12.2]:
+# Initial Load for OGG versions prior to 12.2
 [blog.dbi-services.com](https://blog.dbi-services.com/performing-an-initial-load-with-goldengate-2-expdpimpdp/)
 
-- Source:
+-------------------------------------------------------------
+- **Source**:
+
 ```
 SQL> CREATE TABLE HR.MY_TABLE_TEST_3 as select * from hr.employees where employee_id<150;
 
@@ -25,7 +23,8 @@ EXTRACT     RUNNING     PINTA       00:00:00      00:39:18
 
 ```
 
-- Target:
+-------------------------------------------------------------
+- **Target**:
 ```
 [ ]$ cd /u01/app/oracle/product/gg/
 [ ]$ ./ggsci
@@ -38,7 +37,9 @@ MANAGER     RUNNING
 REPLICAT    STOPPED     RINTA       00:00:00      00:00:01
 
 ```
-- Source:
+
+-------------------------------------------------------------
+- **Source**:
 ```
 SQL> select current_scn from v$database;
 CURRENT_SCN
@@ -59,7 +60,10 @@ flashback_scn=2625151
 [ ]$ scp /home/oracle/expdp_test/expdp_test.dmp oracle@192.85.85.49:/home/oracle/expdp_test/
 
 ```
-- Target:
+
+
+-------------------------------------------------------------
+- **Target**:
 ```
 [ ]$ vi /home/oracle/expdp_test/impdp_test_query.par
 #no Comments
@@ -74,8 +78,6 @@ GGSCI> start replicat RINTA, aftercsn 2625151
 
 ```
 
-=============================================================
 -------------------------------------------------------------
-=============================================================
 
 
