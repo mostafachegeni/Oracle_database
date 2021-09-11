@@ -6,9 +6,7 @@
 [www.dba-oracle.com](http://www.dba-oracle.com/t_audit_when_not_successful.htm)
 
 
-=====================================================================================================
------------------------------------------------------------------------------------------------------
-=====================================================================================================
+--------------------------------------------------------------------------------
 - Enabling Unified Auditing in Oracle 12c:
 
 0.
@@ -59,9 +57,9 @@ SQL> startup;
 ```
 SQL> select * from v$option where PARAMETER = 'Unified Auditing';
 ```
-=====================================================================================================
------------------------------------------------------------------------------------------------------
-=====================================================================================================
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 - Create Unified Audit Policy:
 
 1. Create/Drop Audit Policy:
@@ -69,9 +67,9 @@ SQL> select * from v$option where PARAMETER = 'Unified Auditing';
 SQL> DROP AUDIT POLICY policy_name;
 SQL> CREATE AUDIT POLICY policy_name
     { 
-		{PRIVILEGE 	[action_audit_clause] [role_audit_clause ]	}
-      | {ACTION  	[role_audit_clause 	] 						} 
-      | {ROLE													}
+	{PRIVILEGE 	[action_audit_clause] [role_audit_clause ]	}
+      | {ACTION  	[role_audit_clause  ] 				} 
+      | {ROLE								}
     }
     [WHEN audit_condition EVALUATE PER {STATEMENT|SESSION|INSTANCE}] 
     [CONTAINER = {CURRENT | ALL}];
@@ -113,34 +111,33 @@ SQL> ALTER AUDIT POLICY test_audit_policy
 SQL> NOAUDIT POLICY system_priv_list | statement_opt_list | object_opt_list;
 SQL> AUDIT POLICY test_audit_policy;
 
-/*
+
 ```
 - Traditional Auditing:
 ```
 SQL> AUDIT system_priv_list | statement_opt_list
 		[BY user_list | proxy[ON BEHALF OF user|ANY]	]
-		[BY SESSION|ACCESS								]
-		[WHENEVER [NOT] SUCCESSFUL						];
+		[BY SESSION|ACCESS				]
+		[WHENEVER [NOT] SUCCESSFUL			];
 
 SQL> AUDIT object_opt_list|ALL ON 
 		[schema.]object_name | DIRECTORY dir_name | DEFAULT
-		[BY SESSION|ACCESS								]
-		[WHENEVER [NOT]SUCCESSFUL						]
+		[BY SESSION|ACCESS		]
+		[WHENEVER [NOT]SUCCESSFUL	]
 
 SQL> NOAUDIT system_priv_list | statement_opt_list
 		[BY user_list | proxy[ON BEHALF OF user|ANY]	]
-		[WHENEVER [NOT] SUCCESSFUL						];
+		[WHENEVER [NOT] SUCCESSFUL			];
 
 SQL> NOAUDIT object_opt_list | ALL ON 
 		[schema.]object_name | DIRECTORY dir_name | DEFAULT
-		[BY SESSION|ACCESS								]
-		[WHENEVER [NOT]SUCCESSFUL						];
-*/
+		[BY SESSION|ACCESS		]
+		[WHENEVER [NOT]SUCCESSFUL	];
+
 ```
 
-=====================================================================================================
------------------------------------------------------------------------------------------------------
-=====================================================================================================
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 - Show "Audit Trails" and "Audit Policies":
 
 1. You might need to flush the audit information before it is visible.
@@ -173,9 +170,10 @@ SQL> select a.dbusername, a.event_timestamp, a.action_name, a.OBJECT_SCHEMA, a.o
 		where a.dbusername like '&myUSERNAME'
 		order by a.event_timestamp desc;
 ```
-=====================================================================================================
------------------------------------------------------------------------------------------------------
-=====================================================================================================
+
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 - Read audit xml-files in os:
 ```
 SQL> select * from v$xml_audit_trail;
@@ -190,18 +188,14 @@ SQL> select distinct(audit_option) from dba_stmt_audit_opts;
 
 SQL> select a.username, a.timestamp, a.action_name, a.owner, a.obj_name  
 		from dba_audit_trail a
-		where   a.username like 'INVENTIVE'
+		where   a.username like 'MYUSER'
             AND a.action_name like '%TRUNC%'
 		order by a.timestamp desc;
 
 SQL> select * from dba_audit_session 
-    where username in ('STAR_USER') 
-    --where username in ('TABARI') 
-    --where username in ('TAKBIRI') 
+    where username in ('MYUSER') 
     order by timestamp desc;
 
 
 ```
-=====================================================================================================
------------------------------------------------------------------------------------------------------
-=====================================================================================================
+
