@@ -11,8 +11,6 @@ select  log_date,
     order by log_date desc;
 
 --------------------------------------------------------------------------------
---grant select on MOSCH.IM_AREA_HISTORY to star_etl;
---drop table MOSCH.IM_AREA_HISTORY cascade constraints purge;
 CREATE TABLE MOSCH.IM_AREA_HISTORY (
 	log_date        DATE,
     pool            VARCHAR2(26 Byte), 
