@@ -2,8 +2,6 @@
 select * from MOSCH.TABLESPACE_SPACE_HISTORY_2020_08_09 order by log_date desc, total_allocated_size_GB desc;
 
 --------------------------------------------------------------------------------
---grant select on MOSCH.TABLESPACE_SPACE_HISTORY_2020_08_09 to star_etl;
---drop table MOSCH.TABLESPACE_SPACE_HISTORY_2020_08_09 cascade constraints purge;
 CREATE TABLE MOSCH.TABLESPACE_SPACE_HISTORY_2020_08_09 (
 	log_date                DATE,
 	Tablespace_name         varchar2(30 byte), 
