@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION INVENTIVE.hv_to_date (p_table_owner    IN  VARCHAR2,
+CREATE OR REPLACE FUNCTION MOSCH.hv_to_date (p_table_owner    IN  VARCHAR2,
                                             p_table_name     IN VARCHAR2,
                                             p_partition_name IN VARCHAR2)
   RETURN DATE
@@ -18,9 +18,8 @@ END;
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
---------------------------------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION INVENTIVE.partition_hv_to_date (p_table_owner    IN VARCHAR2,
+CREATE OR REPLACE FUNCTION MOSCH.partition_hv_to_date (p_table_owner    IN VARCHAR2,
                                                  p_table_name     IN VARCHAR2,
                                                  p_partition_name IN VARCHAR2)
   RETURN DATE
