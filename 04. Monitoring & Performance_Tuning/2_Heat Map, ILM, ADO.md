@@ -1,13 +1,8 @@
-# Heat Map, ILM, ADO
+# Heat Map, Information Lifecycle Management (ILM) and Automatic Data Optimization (ADO)
 
 [oracle-base.com](https://oracle-base.com/articles/12c/heat-map-ilm-ado-12cr2)
 
-
-- Heat Map, Information Lifecycle Management (ILM) and Automatic Data Optimization (ADO):
-
-================================================================================
 --------------------------------------------------------------------------------
-================================================================================
 - Heat Map:
 ```
 SQL> select a.name, a.value from v$parameter a where name='heat_map';
@@ -20,9 +15,9 @@ SQL> select a.* FROM dba_heat_map_seg_histogram a;
 SQL> SELECT a.* FROM TABLE(DBMS_HEAT_MAP.object_heat_map('OWNER','TABLE_NAME')) a;
 
 ```
-================================================================================
+
 --------------------------------------------------------------------------------
-================================================================================
+--------------------------------------------------------------------------------
 - Automatic Data Optimization (ADO), Information Lifecycle Management (ILM):
 
 
@@ -52,9 +47,10 @@ SQL> DBA_ILMPOLICIES
 SQL> DBA_ILMRESULTS
 SQL> DBA_ILMPARAMETERS
 ```
-================================================================================
+
+
 --------------------------------------------------------------------------------
-================================================================================
+--------------------------------------------------------------------------------
 - ILM Policies : 	
 1. Compress Policy		: 
 2. Storage Tier Policy	: 
@@ -89,6 +85,4 @@ SQL> ALTER TABLE TABLE_NAME MODIFY PARTITION PARTITION_NAME ILM DELETE_ALL;
 
 SQL> BEGIN DBMS_ILM_ADMIN.CUSTOMIZE_ILM(DBMS_ILM_ADMIN.retention_time, 60); END;
 ```
-================================================================================
---------------------------------------------------------------------------------
-================================================================================
+
