@@ -1,4 +1,4 @@
-# Create Drop Index
+# Create/Drop an Index
 
 -----------------------------------------------------------------------------------------------------
 - Create a "Local Partitioned" "Unusable" Index:
