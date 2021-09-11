@@ -81,13 +81,11 @@ These configuration settings are categorized into 17 different realms as follows
 
 
 16. **Oracle GoldenGate**
-    >   1-  \
-    >   2-  \
-    >   3-  \
-    >   4-  \
-    >   5-  \
-    >   6-  \
-    >   7-  
+    >   1- Initial load for OGG 12.2 and above \
+    >   2- Initial load for OGG versions before 12.2 \
+    >   3- Logdump utility: find the transaction that has caused the Replicat to "ABEND" \
+    >   4- Automatic Heartbeat Tables \
+    >   5- Performance Tuning: SPADV Monitoring 
 
 
 ------------------------------------------------
