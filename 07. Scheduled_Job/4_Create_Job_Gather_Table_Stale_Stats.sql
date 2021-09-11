@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
-CREATE OR REPLACE PROCEDURE INVENTIVE.PROC_GATHER_TABLE_STALE_STATS 
+CREATE OR REPLACE PROCEDURE SCHEMA.PROC_GATHER_TABLE_STALE_STATS 
 IS 
 
 BEGIN 
@@ -10,18 +10,18 @@ BEGIN
     
     -- Largest "non-InMemory" Partitions:
     for i in (SELECT    a.owner, a.TABLE_NAME, a.partition_name, a.num_rows, a.global_stats, a.last_analyzed, a.stattype_locked, a.stale_stats, 
-                        INVENTIVE.hv_to_date(a.owner, a.table_name, a.partition_name) high_value,
+                        SCHEMA.hv_to_date(a.owner, a.table_name, a.partition_name) high_value,
                         b.POPULATE_STATUS 
                 FROM dba_tab_statistics a left join v$im_segments b
                     ON      a.owner=b.owner
                         AND a.table_name=b.SEGMENT_NAME
                         AND a.partition_name=b.partition_name
-                WHERE   a.OWNER = 'INVENTIVE' 
+                WHERE   a.OWNER = 'SCHEMA' 
                     AND a.table_name like 'TBL_%'
                     AND (a.stale_stats = 'YES' OR a.stale_stats is NULL)
                     AND a.partition_name IS NOT NULL 
-                    AND INVENTIVE.hv_to_date(a.owner, a.table_name, a.partition_name) > sysdate - 5 
-                    --AND INVENTIVE.hv_to_date(a.owner, a.table_name, a.partition_name) < sysdate - 1 
+                    AND SCHEMA.hv_to_date(a.owner, a.table_name, a.partition_name) > sysdate - 5 
+                    --AND SCHEMA.hv_to_date(a.owner, a.table_name, a.partition_name) < sysdate - 1 
                     AND b.POPULATE_STATUS IS NULL
                 order by high_value desc
                 )
