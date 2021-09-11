@@ -78,8 +78,8 @@ SQL> SELECT TABLE_NAME FROM USER_TABLES;
 > NOTE 1: If you use RMAN in a "Data Guard" environment, then you need to use the "REGISTER DATABASE" 
 > command only for the "primary" database. 
 > The "standby" database is registered automatically in the recovery catalog, when: 
-	> 1. When you connect to a standby database as TARGET. 
-	> 2. When you run the "CONFIGURE DB_UNIQUE_NAME" command for a standby database. \
+> 	1. When you connect to a standby database as TARGET. 
+> 	2. When you run the "CONFIGURE DB_UNIQUE_NAME" command for a standby database.
 
 
 1- Connect to "target" database and recovery "catalog".
