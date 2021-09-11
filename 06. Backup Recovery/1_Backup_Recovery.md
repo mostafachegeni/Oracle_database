@@ -35,10 +35,11 @@ CROSSCHECK ARCHIVELOG ALL;
 DELETE noprompt EXPIRED ARCHIVELOG ALL;
 }
 ```
-===================================================================================
+
+
 -----------------------------------------------------------------------------------
-===================================================================================
-- 1. Check Backup Status:
+-----------------------------------------------------------------------------------
+- 1- Check Backup Status:
 ```
 SQL> SELECT OPERATION, STATUS, MBYTES_PROCESSED, START_TIME, END_TIME from V$RMAN_STATUS;
 
@@ -116,80 +117,80 @@ RMAN> RESTORE DATAFILE '/u01/oradata/devdb/dev1_01.dbf' PREVIEW;
 RMAN> RESTORE ARCHIVELOG ALL PREVIEW;
 RMAN> RESTORE ARCHIVELOG FROM SCN 234546 PREVIEW;
 ```
-- 2. Configure Backup Parameters:
+- 2- Configure Backup Parameters:
 -  Return any setting to its default value by using "CONFIGURE ... CLEAR":
 ```
 RMAN> CONFIGURE RETENTION POLICY CLEAR;
 RMAN> CONFIGURE RETENTION POLICY TO RECOVERY WINDOW OF 7 DAYS;
 RMAN> CONFIGURE CHANNEL DEVICE TYPE DISK FORMAT '/backup/rman/full_%u_%s_%p';
 ```
-- 3. Restore ControlFIle:
+- 3- Restore ControlFIle:
 ```
 RMAN> RESTORE CONTROLFILE FROM AUTOBACKUP;
 RMAN> RESTORE CONTROLFILE FROM TAG 'WEEKLY_FULL_BKUP';
 RMAN> RESTORE CONTROLFILE FROM "/backup/rman/ctl_c-12345-20141003-03"; 
 ```
-- 4. Restore DataFile:
+- 4- Restore DataFile:
 ```
 SQL> select file_id, file_name from dba_data_files;
 RMAN> RESTORE DATAFILE 34, 35
 RMAN> RESTORE DATAFILE '/u01/oradata/devdb/dev1_01.dbf'
 RMAN> RESTORE DATAFILE '/u01/oradata/devdb/dev1_01.dbf', '/u01/oradata/devdb/dev1_02.dbf'
 ```
-- 5. Restore Archive RedoLogs:
+- 5- Restore Archive RedoLogs:
 ```
 RMAN> SET ARCHIVELOG DESTINATION TO '/home/arc_logs_new/';
 RMAN> RESTORE ARCHIVELOG ALL;
 RMAN> RESTORE ARCHIVELOG FROM SEQUENCE 153 UNTIL SEQUENCE 175;
 RMAN> RESTORE ARCHIVELOG FROM SCN 56789;
 ```
-- 6. Restore Tablespace:
+- 6- Restore Tablespace:
 ```
 RMAN> RESTORE TABLESPACE dev1, dev2;
 ```
-- 7. Recover 
+- 7- Recover 
 ```
 RMAN> RECOVER TABLESPACE dev1 DELETE ARCHIVELOG;
 ```
-- 8. Delete Expired/Obsolete Backup:
+- 8- Delete Expired/Obsolete Backup:
 ```
 RMAN> CROSSCHECK BACKUP;
 RMAN> DELETE EXPIRED BACKUP;
 RMAN> DELETE noprompt obsolete;
 ```
-- 9. Delete Expired ArchiveLog:
+- 9- Delete Expired ArchiveLog:
 ```
 RMAN> CROSSCHECK ARCHIVELOG ALL;
 RMAN> DELETE EXPIRED ARCHIVELOG ALL;
 ```
-===================================================================================
+
+
 -----------------------------------------------------------------------------------
-===================================================================================
+-----------------------------------------------------------------------------------
 - Scenario 1: \
-/* \
-	1 -> Backup database to a "local directory" at 05/10/20 15:44.\
+	> 1 -> Backup database to a "local directory" at 05/10/20 15:44.\
 	(Backup as compressed backupset incremental level 0 cumulative database TAG 'Database_Inc' include current controlfile plus archivelog section size 100g;) \
-	2 -> Change Database. \
-	3 -> Delete "DataFiles", \ 
-				"Online RedoLogs", \
-				"Archived RedoLogs". \
-	4 -> Recover Database to previous state as follows: \
-*/
+	> 2 -> Change Database. \
+	> 3 -> Delete "DataFiles", \ 
+	>			"Online RedoLogs", \
+	>			"Archived RedoLogs". \
+	> 4 -> Recover Database to previous state as follows: \
 
 
-- 0. 
+
+- 0- 
 ```
 [oracle@prim ~]$ rman target /
 connected to target database: ORCLDB (DBID=2473084788)
 ```
-- 1. Mount Database:
+- 1- Mount Database:
 ```
 RMAN> shutdown immediate;
 RMAN> startup mount;
 Oracle instance started
 database mounted
 ```
-- 2. Restore Database:
+- 2- Restore Database:
 ```
 RMAN> RESTORE DATABASE;
 ...
@@ -201,7 +202,7 @@ File Name: +FRA/ORCLDB/ARCHIVELOG/2020_05_10/thread_1_seq_79.303.10400579
 ...
 Finished restore at 10-MAY-20
 ```
-- 3. Recover Database: 
+- 3- Recover Database: 
 ```
 RMAN> ALTER DATABASE recover database using backup controlfile until cancel;
 RMAN-00571: ===========================================================
@@ -212,35 +213,32 @@ ORA-00279: change 7247777 generated at 05/10/2020 15:44:13 needed for thread 1
 ORA-00289: suggestion : +FRA
 ORA-00280: change 7247777 for thread 1 is in sequence #82
 ```
-- 4. Cancel Recovery:
+- 4- Cancel Recovery:
 ```
 RMAN> ALTER DATABASE recover cancel;
 Statement processed
 ```
-- 5. Reset Logs:
+- 5- Reset Logs:
 ```
 RMAN> ALTER DATABASE OPEN RESETLOGS;
 Statement processed
-
----------------------------------- Successful -------------------------------------
-
 ```
-===================================================================================
+
+
 -----------------------------------------------------------------------------------
-===================================================================================
+-----------------------------------------------------------------------------------
 - Scenario 2: \
-/* \
-	1 -> Backup database to a "local directory" at 05/10/20 18:16. \
+	> 1 -> Backup database to a "local directory" at 05/10/20 18:16. \
 	(Backup as compressed backupset incremental level 0 cumulative database TAG 'Database_Inc' include current controlfile plus archivelog section size 100g;) \
-	2 -> Change Database. \
-	3 -> Delete "DataFiles", \ 
-				"Online RedoLogs", \
-				"Archived RedoLogs", \ 
-				"TempFiles", \
-				"AutoBackup", \
-				"Flashback". \
-	3 -> Recover Database to previous state as follows: \
-*/
+	> 2 -> Change Database. \
+	> 3 -> Delete "DataFiles", \ 
+	>			"Online RedoLogs", \
+	>			"Archived RedoLogs", \ 
+	>			"TempFiles", \
+	>			"AutoBackup", \
+	>			"Flashback". \
+	> 3 -> Recover Database to previous state as follows: \
+
 
 - 0. 
 ```
@@ -313,31 +311,27 @@ RMAN> ALTER DATABASE OPEN RESETLOGS;
 ```
 SQL> SELECT flashback_on from v$database;
 SQL> ALTER DATABASE FLASHBACK ON;
-
----------------------------------- Successful -------------------------------------
-
 ```
-===================================================================================
+
 -----------------------------------------------------------------------------------
-===================================================================================
+-----------------------------------------------------------------------------------
 - Scenario 3: \
-/* \
-	1 -> Backup database to a "local directory" at 05/10/20 18:16. \
+	> 1 -> Backup database to a "local directory" at 05/10/20 18:16. \
 	(Backup as compressed backupset incremental level 0 cumulative database TAG 'Database_Inc' include current controlfile plus archivelog section size 100g;) \
-	2 -> Change Database. \
-	3 -> Delete "DataFiles", \ 
-				"Online RedoLogs", \
-				"Archived RedoLogs", \ 
-				"TempFiles", \
-				"AutoBackup", \
-				"Flashback", \
-				"ControlFiles", \
-				"SPFILE". \
-	3 -> Recover Database to previous state as follows: \
-*/
+	> 2 -> Change Database. \
+	> 3 -> Delete "DataFiles", \ 
+	>			"Online RedoLogs", \
+	>			"Archived RedoLogs", \ 
+	>			"TempFiles", \
+	>			"AutoBackup", \
+	>			"Flashback", \
+	>			"ControlFiles", \
+	>			"SPFILE". \
+	> 3 -> Recover Database to previous state as follows: \
 
 
-- 0. 
+
+- 0- 
 ```
 [oracle@stand ~]$ vi /tmp/init.ora
 *.db_name='orcldb'
@@ -345,59 +339,46 @@ SQL> ALTER DATABASE FLASHBACK ON;
 [oracle@stand ~]$ rman target /
 connected to target database (not started)
 ```
-- 1. Startup NoMount Database:
+- 1- Startup NoMount Database:
 ```
 RMAN> shutdown immediate;
 RMAN> STARTUP NOMOUNT PFILE='/tmp/init.ora';
 ```
-- 2. Set Database ID: (DBID exist in "ControlFile AutoBackup FileName": 
+- 2- Set Database ID: (DBID exist in "ControlFile AutoBackup FileName": 
 ```
 --	  e.g. autoback_ctlfile_c-2473084788-20200513-03.bck)
 RMAN> SET DBID 2473084788;
 ```
-- 3. Restore SPFILE:
+- 3- Restore SPFILE:
 ```
 RMAN> RESTORE SPFILE FROM '/u01/orcl_files/backup/l0/autoback_ctlfile_c-2473084788-20200513-03.bck';
 --RMAN> RESTORE SPFILE FROM AUTOBACKUP;
 --RMAN> RESTORE SPFILE TO '/tmp/spfileTEMP.ora' FROM AUTOBACKUP;
 --RMAN> RESTORE SPFILE TO PFILE '/tmp/initTEMP.ora';
 ```
-- 4. Restart instance:
+- 4- Restart instance:
 ```
 RMAN> shutdown immediate;
 RMAN> startup nomount;
 ```
-/* if SPFILE is restored in a non-default location:
 
-1. Create a pfile /tmp/init.ora which contains the single line:
-```
-[oracle@stand ~]$ vi /tmp/init.ora
-SPFILE=/tmp/spfileTEMP.ora
-```
-2. Startup with /tmp/spfileTEMP.ora
-```
-RMAN> STARTUP FORCE PFILE=/tmp/init.ora;
-*/
-```
-- 5. Restore ControlFIle:
+- 5- Restore ControlFIle:
 ```
 RMAN> RESTORE CONTROLFILE FROM '/u01/orcl_files/backup/l0/autoback_ctlfile_c-2473084788-20200513-03.bck';
---RMAN> RESTORE CONTROLFILE FROM AUTOBACKUP;
---RMAN> RESTORE CONTROLFILE FROM TAG 'Database_Inc';
 ```
-- 6. Mount Database:
+- 6- Mount Database:
 ```
 RMAN> ALTER DATABASE MOUNT;
 ```
-- 7. Restore Database:
+
+- 7- Restore Database:
 ```
 RMAN> RESTORE DATABASE;
-...
 channel ORA_DISK_1: restore complete, elapsed time: 00:00:55
 Finished restore at 13-MAY-20
-
 ```
-- 3. Recover Database:
+
+- 8- Recover Database:
 ```
 RMAN> ALTER DATABASE RECOVER DATABASE USING BACKUP CONTROLFILE UNTIL CANCEL;
 RMAN-00571: ===========================================================
@@ -407,61 +388,28 @@ RMAN-03002: failure of sql statement command at 05/13/2020 18:33:19
 ORA-00279: change 7803148 generated at 05/13/2020 17:37:16 needed for thread 1
 ORA-00289: suggestion : +FRA/STAND/ARCHIVELOG/2020_05_13/thread_1_seq_7.332.1040319427
 ORA-00280: change 7803148 for thread 1 is in sequence #7
-
-/*
-- ERROR:
-ORA-38760: This database instance failed to turn on flashback database
 ```
-- SOLUTION: \
-1. shutdown immediate; \
-2. startup mount; \
-3. ALTER DATABASE FLASHBACK OFF; \
-5. alter databasse open; \
-*/
 
-- 4. Cancel Recovery:
+
+
+- 9- Cancel Recovery:
 ```
 RMAN> ALTER database recover cancel;
 Statement processed
 ```
-- 5. Reset Logs:
+
+- 10- Reset Logs:
 ```
 RMAN> ALTER DATABASE OPEN RESETLOGS;
 Statement processed
-/*
-- ERROR:
-ORA-01113: file 1 needs media recovery
-ORA-01110: data file 1: '+DATA/ORCLDB/DATAFILE/system.259.1040063577'
-
-- ERROR:
-ORA-01152: file 1 was not restored from a sufficiently old backup
-ORA-01110: data file 1: '+DATA/STAND/DATAFILE/system.272.1040327411'
 ```
-- SOLUTION: \
-```
-RMAN> ALTER database recover database using backup controlfile;
-RMAN> ALTER database recover cancel;
 
---RMAN> ALTER database recover database;
-RMAN> recover database;
-RMAN-06054: media recovery requesting unknown archived log for thread 1 with sequence 1 and starting SCN of 7803251
-
---RMAN> RECOVER DATAFILE '+DATA/ORCLDB/DATAFILE/system.259.1040063577';
-RMAN> ALTER database RECOVER DATAFILE '+DATA/ORCLDB/DATAFILE/system.259.1040063577';
-ORA-01610: recovery using the BACKUP CONTROLFILE option must be done
-
-RMAN> ALTER DATABASE OPEN RESETLOGS;
-*/
-
-```
-- 7. Enable flashback:
+- 11- Enable flashback:
 ```
 SQL> SELECT flashback_on from v$database;
 SQL> ALTER DATABASE FLASHBACK ON;
-
-
----------------------------------- Successful -------------------------------------
 ```
+
 ===================================================================================
 -----------------------------------------------------------------------------------
 ===================================================================================
