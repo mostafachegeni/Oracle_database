@@ -24,7 +24,7 @@ These configuration settings are categorized into 17 different realms as follows
 
 
 5. **Archive Log Management**
-    > A list of parameters is presented that can be used to configure Archive Logs.
+    >   1- A list of parameters is presented that can be used to configure Archive Logs.
 
 
 6. **Backup Recovery**
@@ -48,28 +48,36 @@ These configuration settings are categorized into 17 different realms as follows
 
 
 8. **PL_SQL**
-    >   1- An oracle procedure for Putting the result of query in "Global Temporary Table"
+    >   1- An oracle procedure for Putting the result of query in "Global Temporary Table" \
     >   2- Guarding Against SQL Injection
 
+
 9. **Export-Import**
+    >   1- Data Pump (EXPDP & IMPDP)
 
 
 10. **Partitioning**
+    >   1- 
 
 
 11. **Indexing**
 
 
+
 12. **Trigger**
+
 
 
 13. **Materialized View**
 
 
+
 14. **Container Database**
 
 
+
 15. **Oracle Sharding**
+
 
 
 16. **Oracle GoldenGate**
