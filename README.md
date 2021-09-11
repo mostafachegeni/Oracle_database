@@ -28,7 +28,9 @@ These configuration settings are categorized into 17 different realms as follows
 
 
 6. **Backup Recovery**
-
+    > 1- Three Backup Recovery Scenarios 
+    > 2- Recovery Catalog Management 
+    > 3- Backup/Recovery for "Data Guard" 
 
 7. **Scheduled Job**
 
