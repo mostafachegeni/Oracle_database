@@ -1,70 +1,50 @@
 # Partitioning
-===========================================================================
----------------------------------------------------------------------------
-===========================================================================
-- Find "Corresponding Partition" of a "Rrecord":
 
-1.
-```
-SQL> select dbms_rowid.rowid_object(rowid) rowid_
-    FROM    ETL_USER.REF_CBS_DATA L
-    where   RECORD_DATE >= TO_DATE('2021-03-14 00:00:00', 'YYYY-MM-DD HH24:MI:SS')
-        and RECORD_DATE <  TO_DATE('2021-03-15 00:00:00', 'YYYY-MM-DD HH24:MI:SS')
-		and PRI_IDENTITY_26='989163005228';
-```
-2.
-```
-SQL> select subobject_name from dba_objects where data_object_id=&rowid_;
-
+[docs.oracle.com](https://docs.oracle.com/cd/B28359_01/server.111/b32024/part_avail.htm#BJEIEDIA) 
+[www.alibabacloud.com](https://www.alibabacloud.com/help/doc-detail/116879.htm)
 
 --------------------------------------------------------------------
-SQL> SELECT L.*, O.SUBOBJECT_NAME
-FROM 
-  (
-    SELECT DBMS_ROWID.ROWID_OBJECT(ROWID) DATA_OBJECT_ID, L.*
-    FROM SALES L
-    --WHERE L.ID = 123
-  ) L
-  JOIN 
-  (
-    SELECT SUBOBJECT_NAME, DATA_OBJECT_ID 
-    FROM DBA_OBJECTS
-  ) O ON O.DATA_OBJECT_ID = L.DATA_OBJECT_ID;
-```
-===========================================================================
----------------------------------------------------------------------------
-===========================================================================
-- List of "Table Partitions" owned by 'USER':
+- **List of "Table Partitions" owned by 'USER'**:
+
 ```
 SQL> SELECT table_name, partition_name, high_value, num_rows, interval 
 		FROM   dba_tab_partitions 
 		where TABLE_OWNER = '&USER' 
 		ORDER BY table_name, partition_name;
 ```
-- list of "Table Partitions" related to 'TABLE_NAME':
+
+- **list of "Table Partitions" related to 'TABLE_NAME'**:
 ```
 SQL> select table_name, partition_name, interval 
 		from dba_tab_partitions
 		where table_name = '&TABLE_NAME';
 ```
-=======================================================
-- List of "Index Partitions" owned by 'USER':
+
+--------------------------------------------------------------------
+- **Create Local Index**:
+```
+SQL> CREATE INDEX hr.interval_tab_INDX ON hr.interval_tab (id) LOCAL;
+```
+
+- **List of "Index Partitions" owned by 'USER'**:
 ```
 SQL> select a.index_name, a.locality, a.alignment, b.uniqueness 
 		from dba_part_indexes a, dba_indexes b 
 		where b.index_name = a.index_name and a.owner='&USER';
 ```
-- List of "Index Partitions" related to 'TABLE_NAME':  
+
+- **List of "Index Partitions" related to 'TABLE_NAME'**:  
 ```
 SQL> select index_name, partition_name, high_value 
 		from dba_ind_partitions 
 		where index_name in (select index_name from user_indexes where table_name = '&TABLE_NAME') 
 		order by 1,2;
 ```
-=============================================================================
------------------------------------------------------------------------------
-=============================================================================
-- Create "Interval" Partitioned Table using "Auto-increment" ID:
+
+
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+- **Create "Interval" Partitioned Table using "Auto-increment" ID**:
 ```
 SQL> CREATE TABLE HR.INTERVAL_TAB 
 (
@@ -95,8 +75,8 @@ SQL> INSERT INTO  hr.INTERVAL_TAB  ( LOG_DATE , RESPONSESTATUSCODE , STARTTIME ,
 
 ```
 
-- Add New Partition to an Existing Table: \
-[www.alibabacloud.com](https://www.alibabacloud.com/help/doc-detail/116879.htm)
+
+- **Add New Partition to an Existing Table**: 
 ```
 SQL> ALTER TABLE MOSCH.CE_MEDIA_TASK
       ADD PARTITION P_R_20210102 VALUES LESS THAN (TO_DATE(' 2021-01-02 00:00:00', 'SYYYY-MM-DD HH24:MI:SS', 'NLS_CALENDAR=GREGORIAN'))
@@ -114,20 +94,11 @@ SQL> ALTER TABLE MOSCH.CE_MEDIA_TASK
 	  			BUFFER_POOL      DEFAULT
 	  		   );
 ```
-=============================================================================
------------------------------------------------------------------------------
-=============================================================================
-[docs.oracle.com](https://docs.oracle.com/cd/B28359_01/server.111/b32024/part_avail.htm#BJEIEDIA) 
-- "Nonprefixed Local" indexes are particularly useful in "historical" databases.
 
-- Create Local Index:
-```
-SQL> CREATE INDEX hr.interval_tab_INDX ON hr.interval_tab (id) LOCAL;
-```
-=============================================================================
------------------------------------------------------------------------------
-=============================================================================
-- Split a Range Partition:
+
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+- **Split a Range Partition**:
 
 1.
 ```
@@ -205,9 +176,37 @@ DATA_OBJECT_ID    DEPT_NO PART_NO              COUNTRY              REC_DATE    
          93938         20 4519b                INDIA                02-DEC-12 00:00:00       5090 Q4_2012_P2
          93938         30 7588b                CANADA               14-DEC-12 00:00:00      50000 Q4_2012_P2
 ```
-=============================================================================
------------------------------------------------------------------------------
-=============================================================================
 
+
+----------------------------------------------------
+----------------------------------------------------
+- **Find "Corresponding Partition" of a "Rrecord"**:
+
+1.
+```
+SQL> select dbms_rowid.rowid_object(rowid) rowid_
+    FROM    ETL_USER.REF_CBS_DATA L
+    where   RECORD_DATE >= TO_DATE('2021-03-14 00:00:00', 'YYYY-MM-DD HH24:MI:SS')
+        and RECORD_DATE <  TO_DATE('2021-03-15 00:00:00', 'YYYY-MM-DD HH24:MI:SS')
+		and PRI_IDENTITY_26='989163005228';
+```
+
+2.
+```
+SQL> select subobject_name from dba_objects where data_object_id=&rowid_;
+
+SQL> SELECT L.*, O.SUBOBJECT_NAME
+FROM 
+  (
+    SELECT DBMS_ROWID.ROWID_OBJECT(ROWID) DATA_OBJECT_ID, L.*
+    FROM SALES L
+    --WHERE L.ID = 123
+  ) L
+  JOIN 
+  (
+    SELECT SUBOBJECT_NAME, DATA_OBJECT_ID 
+    FROM DBA_OBJECTS
+  ) O ON O.DATA_OBJECT_ID = L.DATA_OBJECT_ID;
+```
 
 
