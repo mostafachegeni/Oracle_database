@@ -3,13 +3,16 @@
 ------------------------------------------------
 In this repository, several configurations for the **Oracle database** are provided. 
 These configuration settings are categorized into 17 different realms as follows:
+
 1. **Installation**
-    >   1. Install Oracle Database **12cR2** with **ASM** on **Oracle linux 7.4** (with 2 OS users: oracle & grid)
-    >   2. Install Oracle Database **19c3** with **ASM** on **RHEL 7.6** (with 2 OS users: oracle & grid)
+    > 1- Install Oracle Database **12cR2** with **ASM** on **Oracle linux 7.4** (with 2 OS users: oracle & grid) \
+    > 2- Install Oracle Database **19c3** with **ASM** on **RHEL 7.6** (with 2 OS users: oracle & grid)
 
 3. **User Management**
+    > 1- Identify Users of a Database + Create New Users
 
 4. **File & Tablespace Management**
+    > 1- Identify Tablespaces + Create/Drop TBSs + Add New File (**TEMPORARY** TBSs / **UNDO** TBSs / **PERMANENT** TBSs )
 
 5. **Monitoring & Performance Tuning**
 
