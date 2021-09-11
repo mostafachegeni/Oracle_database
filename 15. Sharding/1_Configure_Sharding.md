@@ -366,9 +366,9 @@ The operation completed successfully
 ```
 GDSCTL> exit
 ```
-===============================================================================
--------------------------------------------------------------------------------
-===============================================================================
+
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
 - Step 7. Start the "Scheduler Agent" & Register "Shard Nodes":
 -- (On Shard1) & (On shard2):
 
@@ -464,10 +464,9 @@ create shard  [{-shardgroup shardgroup_name | –shardspace shardspace_name}]
 GDSCTL> create shard -shardgroup primary_shardgroup -destination shard1 -credential oracle_cred;
 The operation completed successfully
 DB Unique Name: sh1
-
 ```
-7. 
---add shard2
+
+7. add shard2
 ```
 GDSCTL> add invitednode shard2;
 GDSCTL> create shard -shardgroup primary_shardgroup -destination shard2 -credential oracle_cred;
@@ -495,17 +494,16 @@ GDSCTL> connect mygdsadmin/SYS123sys
 Catalog connection is established
 ```
 4. 
--- Note: This will create the databases in "shard1" and "shard2" \
--- using dbca and create listeners automatically.
+>	Note: This will create the databases in "shard1" and "shard2" \
+>	using dbca and create listeners automatically.
 ```
 GDSCTL> deploy
 The operation completed successfully
-
+```
 
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
-- Step 10. Verify Shard Status.
--- (On shardcat):
+- Step 10. Verify Shard Status (On shardcat):
 
 1. 
 ```
