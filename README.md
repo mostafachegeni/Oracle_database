@@ -5,7 +5,7 @@ In this repository, several configurations for the **Oracle database** are provi
 These configuration settings are categorized into 17 different realms as follows:
 
 1. **Installation**
-    > 1- Installation of Oracle Database **12cR2** with **ASM** on **Oracle linux 7.4** (with 2 OS users: oracle & grid) \
+    > 1- Installation of Oracle Database **12cR2** with **ASM** on **Oracle Linux 7.4** (with 2 OS users: oracle & grid) \
     > 2- Installation of Oracle Database **19c3** with **ASM** on **RHEL 7.6** (with 2 OS users: oracle & grid)
 
 
@@ -34,7 +34,7 @@ These configuration settings are categorized into 17 different realms as follows
 
 7. **Scheduled Job**
     >   1- Alarm_Locks (OS Scheduled Job): setting an OS Alarm for "Locking Sessions" to be reported \
-    >   2- Alarm_Long_Running (OS Scheduled Job): setting an OS Alarm for "Long Running SQLs" to be reported 
+    >   2- Alarm_Long_Running (OS Scheduled Job): setting an OS Alarm for "Long-Running SQLs" to be reported 
 
     >   3- Copy_Table_Stale_Stats (DB Scheduled Job): copying the statistics of new partitions to partitions with stale statistics \
     >   4- Gather_Table_Stale_Stats (DB Scheduled Job): gathering statistics of partitions with stale statistics \
@@ -45,11 +45,11 @@ These configuration settings are categorized into 17 different realms as follows
     >   9- Tablespace_Space (DB Scheduled Job): reporting how much free space is available in each tablespace over time \
     >   10- Rebuild_Indexes (DB Scheduled Job): rebuilding unusable index partitions \
 
-    >   11- Convert_HighValue_to_Date (DB Function): two oracle functions which convert the high_value of a table/index partition to date value
+    >   11- Convert_HighValue_to_Date (DB Function): two Oracle functions which convert the high_value of a table/index partition to date value
 
 
 8. **PL_SQL**
-    >   1- An oracle procedure for Putting the result of query in "Global Temporary Table" \
+    >   1- An Oracle procedure for Putting the result of query in "Global Temporary Table" \
     >   2- Guarding against SQL injection
 
 
@@ -86,7 +86,7 @@ These configuration settings are categorized into 17 different realms as follows
     >   2- Initial load for OGG versions before 12.2 \
     >   3- Logdump utility: find the transaction that has caused the Replicat to "ABEND" \
     >   4- Automatic Heartbeat Tables \
-    >   5- Performance Tuning: SPADV Monitoring 
+    >   5- Performance tuning: "SPADV" monitoring 
 
 
 ------------------------------------------------
