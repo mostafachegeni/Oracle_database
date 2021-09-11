@@ -1,11 +1,9 @@
-# Initial Load OGG12.2 Higer
-=============================================================
--------------------------------------------------------------
-=============================================================
-- Initial Load [For OGG Versions 12.2 and above]:
+# Initial Load for OGG 12.2 and above
 [www.oracle-scn.com](https://www.oracle-scn.com/oracle-goldengate-integration-with-datapump-dboptions-enable_instantiation_filtering/)
 
-- Source:
+-------------------------------------------------------------
+- **Source**:
+
 ```
 SQL> CREATE TABLE HR.MY_TABLE_TEST_3 as select * from hr.employees where employee_id<150;
 
@@ -14,7 +12,6 @@ SQL> CREATE TABLE HR.MY_TABLE_TEST_3 as select * from hr.employees where employe
 GGSCI> DBLogin UserIDAlias ogg_user 
 
 
---GGSCI> Add  TranData HR.MY_TABLE_TEST_3  PREPARECSN
 GGSCI> Add  TranData HR.MY_TABLE_TEST_3
 GGSCI> Info TranData HR.MY_TABLE_TEST_3
 
@@ -38,9 +35,6 @@ UPDATERECORDFORMAT COMPACT
 -- DDL Parameters
 DDL INCLUDE MAPPED
 DDLOPTIONS REPORT
-
---table HR.*;
---TABLEEXCLUDE HR.EMPLOYEES;
 table HR.MY_TABLE_TEST_3;
 table HR.MY_TABLE_TEST_4;
 table HR.MY_TABLE_TEST_5;
@@ -77,7 +71,9 @@ EXTRACT     RUNNING     PINTA       00:00:00      00:11:05
 
 
 ```
-- Target:
+
+-------------------------------------------------------------
+- **Target**:
 ```
 [ ]$ cd /u01/app/oracle/product/gg/
 [ ]$ ./ggsci
@@ -90,7 +86,8 @@ REPLICAT    STOPPED     RINTA       00:00:00      00:00:01
 
 ```
 
-- Source:
+-------------------------------------------------------------
+- **Source**:
 ```
 [ ]$ vi /home/oracle/expdp_test/expdp_test_query.par
 #no Comments
@@ -105,7 +102,8 @@ TABLES=HR.MY_TABLE_TEST_3
 
 ```
 
-- Target:
+-------------------------------------------------------------
+- **Target**:
 ```
 GGSCI> view params rinta
 Replicat rinta
@@ -120,13 +118,6 @@ UserIdAlias ogg_user
 --DDL INCLUDE MAPPED
 DDL INCLUDE ALL
 DDLOPTIONS REPORT
---ddlerror 1430 ignore
---ddlerror 1432 ignore
---ddlerror 1435 ignore
---ddlerror 904 ignore
---ddlerror 942 ignore
-
---MAP HR.* , target HR.*;
 MAP HR.MY_TABLE_TEST_3 , target HR.MY_TABLE_TEST_3;
 MAP HR.MY_TABLE_TEST_4 , target HR.MY_TABLE_TEST_4;
 MAP HR.MY_TABLE_TEST_5 , target HR.MY_TABLE_TEST_5;
@@ -158,6 +149,5 @@ SOURCE_OBJECT_NAME INSTANTIATION_SCN IGNORE_SCN
 ------------------ ----------------- ----------
 MY_TABLE_TEST_3    829723224         0
 ```
-=============================================================
+
 -------------------------------------------------------------
-=============================================================
