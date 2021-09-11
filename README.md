@@ -48,7 +48,8 @@ These configuration settings are categorized into 17 different realms as follows
 
 
 8. **PL_SQL**
-
+    >   1- An oracle procedure for Putting the result of query in "Global Temporary Table"
+    >   2- Guarding Against SQL Injection
 
 9. **Export-Import**
 
