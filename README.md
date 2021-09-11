@@ -1,7 +1,7 @@
 # Oracle Database
 
 ------------------------------------------------
-In this repository, several configurations for the Oracle database are provided. 
+In this repository, several configurations for the **Oracle database** are provided. 
 These configuration settings are categorized into 17 different realms as follows:
 1. Installation
 2. User Management
