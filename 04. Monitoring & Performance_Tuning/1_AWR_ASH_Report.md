@@ -1,13 +1,11 @@
 # AWR ASH Report
-- AWR Report:
 
 [ittutorial.org](https://ittutorial.org/awr-report-automatic-workload-repository-sqlplus-enterprise-manager-and-toad-how-to-generate-in-oracle/) 
 
 
 
-=====================================================================================
 -------------------------------------------------------------------------------------
-=====================================================================================
+-------------------------------------------------------------------------------------
 - Find "Snapshot Interval", "Retention Interval":
 ```
 SQL> select
@@ -25,9 +23,9 @@ from
 ```
 SQL> exec dbms_workload_repository.modify_snapshot_settings (interval => 60, retention => 11520);
 ```
-=====================================================================================
+
 -------------------------------------------------------------------------------------
-=====================================================================================
+-------------------------------------------------------------------------------------
 - AWR Report:
 ```
 SQL> grant select any dictionary to myuser;
@@ -45,35 +43,24 @@ SQL> $ORACLE_HOME/rdbms/admin/awrrpt.sql
 SQL> select snap_id, begin_interval_time,end_interval_time from dba_hist_snapshot order by begin_interval_time desc;
 > Database > Monitor > ADDM/AWR Reports (OEM)
 ```
--------------------------------------------------------------------------------------
-- Generate ASH Report (Cloud Control):
 
 
-=====================================================================================
 -------------------------------------------------------------------------------------
-=====================================================================================
+-------------------------------------------------------------------------------------
 - ASH:
 
 - Generate ASH Report (TOAD): \
-
-> Database > Monitor > ASH Reports
+	> Database > Monitor > ASH Reports
 
 -------------------------------------------------------------------------------------
--- 
-```
-SQL> select min(s.sample_time_utc), s.* from V$ACTIVE_SESSION_HISTORY s;
-```
-
 - List of User Active sessions at a specific time:
 ```
 SQL> select  u.username
-        --,s.session_id, s.session_serial#, s.program, s.module, s.machine
         ,s.sql_id
         ,s.sql_opname
         ,s.sql_exec_start 
         ,cast(min(s.sample_time) as date)      first_sample_time
         ,cast(max(s.sample_time) as date)      last_sample_time
-        --,(max(s.sample_time)-s.sql_exec_start) duration,
         ,(max(s.sample_time)-min(s.sample_time)) duration,
     from    DBA_HIST_ACTIVE_SESS_HISTORY s, 
             dba_users u 
@@ -93,6 +80,8 @@ SQL> select  u.username
     ;
 
 ```
+
+-------------------------------------------------------------------------------------
 - Parallel Queries by each Schema:
 ```
 with parallel_tbl as (
@@ -117,6 +106,8 @@ with parallel_tbl as (
 );
 
 ```
+
+-------------------------------------------------------------------------------------
 - List of "INSERT Commands" during a specific time period:
 ```
 select  u.username
@@ -125,7 +116,6 @@ select  u.username
         ,s.sql_exec_start 
         ,cast(min(s.sample_time) as date)      first_sample_time
         ,cast(max(s.sample_time) as date)      last_sample_time
-        --,(max(s.sample_time)-s.sql_exec_start) duration,
         ,(max(s.sample_time)-min(s.sample_time)) duration,
         b.sql_text 
     from    DBA_HIST_ACTIVE_SESS_HISTORY s left join v$sqlarea b on s.sql_id=b.sql_id, 
@@ -133,7 +123,6 @@ select  u.username
     where   s.USER_ID=u.user_id 
         AND s.sample_time >         to_date('2021-04-07 00:00:00', 'YYYY-MM-DD HH24:MI:SS')
         AND s.sample_time <         to_date('2021-04-07 23:59:00', 'YYYY-MM-DD HH24:MI:SS')
-        --AND s.sql_exec_start   <    to_date('2021-04-05 16:00:00', 'YYYY-MM-DD HH24:MI:SS')
         AND u.username != 'SYS'
     group by    u.username 
                 ,s.sql_id
@@ -142,22 +131,22 @@ select  u.username
                 ,b.sql_text 
     having  --max(s.sample_time) > to_date('2021-04-05 16:00:00', 'YYYY-MM-DD HH24:MI:SS') AND 
 			s.sql_opname like '%INSERT%'
-        --AND b.sql_text like '%INSERT%STAR_REF%'
+        --AND b.sql_text like '%INSERT%TBL_REF%'
     --order by duration desc, s.sql_exec_start
     order by min(s.sample_time), duration desc
     ;
 
 ```
+
+-------------------------------------------------------------------------------------
 - List of "Create/Drop" Specific Tables in last "24 hours":
 ```
 select a.dbusername, a.event_timestamp, a.action_name, a.OBJECT_SCHEMA, a.object_name  
 		from unified_audit_trail a
 		where 	(action_name like 'CREATE TABLE' OR action_name like 'DROP TABLE')
-            AND a.dbusername like 'INVENTIVE'
-            AND a.object_name like 'CBS_REC_%_POST'
+            AND a.dbusername like 'MYUSER'
+            AND a.object_name like 'TBL_%_POST'
             AND a.event_timestamp > sysdate - interval '24' hour
 		order by a.event_timestamp desc;
 ```
-=====================================================================================
--------------------------------------------------------------------------------------
-=====================================================================================
+
