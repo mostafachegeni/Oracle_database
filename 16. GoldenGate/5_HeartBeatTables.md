@@ -1,25 +1,26 @@
-# HeartBeatTables
-=============================================================
--------------------------------------------------------------
-=============================================================
-- Automatic Heartbeat Tables to Monitor:
+# **Automatic Heartbeat Tables to Monitor**
+
 [docs.oracle.com](https://docs.oracle.com/en/middleware/goldengate/core/19.1/admin/monitoring-oracle-goldengate-processing.html#GUID-59E61274-BDDE-4D4B-9681-ED0BC39E9FCF) \
 [www.ateam-oracle.com](https://www.ateam-oracle.com/oracle-goldengate-integrated-heartbeat) \
 [k21academy.com](https://k21academy.com/oracle-goldengate-12c/the-heartbeat-table-of-oracle-goldengate-12-2/) \
 [www.oracle-scn.com](https://www.oracle-scn.com/oracle-goldengate-12-2-enhanced-heartbeat-table/) 
 
-- NOTE 1: \
--- 	Taking the defaults, every 60 seconds an update is performed against the gg_heartbeat_seed table. \
--- 	This record is captured and replicated to the target tables gg_heartbeat_seed, gg_heartbeat, and gg_heartbeat_history. \
--- 	The target table gg_heartbeat contains the data from the last heartbeat record processed by Replicat while the table gg_heartbeat_history contains all hearbeat records. \
+-------------------------------------------------------------
 
 
-- NOTE 2: \
---	SOURCE -> The source side gg_heartbeat_seed table records the local (source) database name and the timestamp of the last heartbeat. \
--- 	TARGET -> The target side gg_heartbeat table contains the last heartbeat record, with additional information added by every Oracle GoldenGate Group in the replication stream. \
+>	NOTE 1: 
+>	Taking the defaults, every 60 seconds an update is performed against the gg_heartbeat_seed table. 
+>	This record is captured and replicated to the target tables gg_heartbeat_seed, gg_heartbeat, and gg_heartbeat_history. 
+>	The target table gg_heartbeat contains the data from the last heartbeat record processed by Replicat while the table gg_heartbeat_history contains all hearbeat records. 
+
+
+>	NOTE 2: 
+>	SOURCE -> The source side gg_heartbeat_seed table records the local (source) database name and the timestamp of the last heartbeat. 
+>	TARGET -> The target side gg_heartbeat table contains the last heartbeat record, with additional information added by every Oracle GoldenGate Group in the replication stream. 
 
 ------------------------------------------------------------------------------
-- Source:
+1- **Source**:
+
 ```
 [ ]$ cd /u01/app/oracle/product/gg/
 [ ]$ ./ggsci
@@ -42,6 +43,7 @@ ADD HEARTBEATTABLE [, FREQUENCY number in seconds] [, RETENTION_TIME number in d
 -- RETENTION_TIME: Specifies when heartbeat entries older than the retention time in the history table are purged. The default is 30 days.
 -- PURGE_FREQUENCY: Specifies how often the purge scheduler is run to delete table entries that are older than the retention time from the heartbeat history . The default is 1 day.
 */
+
 -- ALTER HEARTBEATTABLE
 -- ENABLE_HEARBEAT_TABLE
 -- DISABLE_HEARBEAT_TABLE
@@ -61,6 +63,7 @@ GGSCI> start Extract pinta
 GGSCI> Info All 
 
 ```
+
 - List of HeartBeat Objects:
 ```
 SQL> SELECT owner, object_name, object_type 
@@ -81,7 +84,7 @@ GGUSER  GG_PURGE_HEARTBEATS   JOB
 
 ```
 ------------------------------------------------------------------------------
-- Target:
+2- **Target**:
 ```
 [ ]$ cd /u01/app/oracle/product/gg/
 [ ]$ ./ggsci
@@ -130,11 +133,12 @@ GGUSER  GG_PURGE_HEARTBEATS   JOB
 ```
 
 ------------------------------------------------------------------------------
-- Target:
+3- **Target**:
 
--- NOTE 1: The timestamps recorded are in UTC format. \
--- NOTE 2: Lag computations require that the source and target server clocks be setup correctly. \
--- Regularly synced with a network time service. \
+>	NOTE 1: The timestamps recorded are in UTC format. 
+
+>	NOTE 2: Lag computations require that the source and target server clocks be setup correctly. 
+>	Regularly synced with a network time service. 
 
 
 - Monitor the GoldenGate Lags:
@@ -154,24 +158,22 @@ SQL> select local_database, heartbeat_received_ts, remote_database, incoming_pat
 		order by HEARTBEAT_RECEIVED_TS desc;
 
 ```
+
 - Lag across the replication stream in "seconds":
-/*
-[www.ateam-oracle.com](https://www.ateam-oracle.com/oracle-goldengate-integrated-heartbeat) 
+>	- Description of columns in the gg_heartbeat_history table: 
+>	(a) incoming_heartbeat_ts – source side heartbeat timestamp 
+>	(b) incoming_extract_ts – timestamp when extract processed the heartbeat record 
+>	(c) incoming_routing_ts – timestamp when data pump read the heartbeat record from the extract trail 
+>	(d) incoming_replicat_ts – timestamp when replicat read the heartbeat record from the remote trail 
+>	(e) heartbeat_received_ts   - timestamp when replicat applied the heartbeat record to the target 
 
-- Description of columns in the gg_heartbeat_history table: \
--- (a) incoming_heartbeat_ts – source side heartbeat timestamp \
--- (b) incoming_extract_ts – timestamp when extract processed the heartbeat record \
--- (c) incoming_routing_ts – timestamp when data pump read the heartbeat record from the extract trail \
--- (d) incoming_replicat_ts – timestamp when replicat read the heartbeat record from the remote trail \
--- (e) heartbeat_received_ts   - timestamp when replicat applied the heartbeat record to the target 
+>	- With this information, we can now compute the following: 
+>	(a) heartbeat_received_ts - incoming_heartbeat_ts = total end-to-end lag 
+>	(b) incoming_extract_ts -  incomning_heartbeat_ts = cdc extract lag 
+>	(b) incoming_routing_ts – incoming_extract_ts = data pump read lag 
+>	(c) incoming_replicat_ts – incoming_routing_ts = replicat read lag 
+>	(d) heartbeat_received_ts – incoming_replicat_ts = replicat apply lag 
 
-- With this information, we can now compute the following: \
--- (a) heartbeat_received_ts - incoming_heartbeat_ts = total end-to-end lag \
--- (b) incoming_extract_ts -  incomning_heartbeat_ts = cdc extract lag \
--- (b) incoming_routing_ts – incoming_extract_ts = data pump read lag \
--- (c) incoming_replicat_ts – incoming_routing_ts = replicat read lag \
--- (d) heartbeat_received_ts – incoming_replicat_ts = replicat apply lag \
-*/
 ```
 SQL> set hea on 
 SQL> set wrap off 
@@ -207,6 +209,5 @@ SQL> select to_char(incoming_heartbeat_ts,'DD-MON-YY HH24:MI:SSxFF') Source_HB_T
 		order by heartbeat_received_ts desc;
 
 ```
-=============================================================
--------------------------------------------------------------
-=============================================================
+
+------------------------------------------------------------------------------
