@@ -1,23 +1,7 @@
-# OGG Performance Tuning 
-
-
-======================================================================================
+# OGG Performance Tuning: SPADV Monitoring
 --------------------------------------------------------------------------------------
-======================================================================================
-maa-gg-performance-1969630.pdf
-- Oracle Streams Performance Advisor (SPADV):
 
-
-- (Source Database) Identify the LMP process identifiers:
-```
-SQL> SELECT c.capture_name, lp.spid FROM V$LOGMNR_PROCESS lp, DBA_CAPTURE c WHERE lp.session_id=c.logminer_id AND lp.role='preparer';
-```
-
-
-======================================================================================
---------------------------------------------------------------------------------------
-======================================================================================
-- Start/Stop "SPADV" Monitoring:
+- **Start/Stop "SPADV" Monitoring**:
 
 
 1. Install "UTL_SPADV" package:
@@ -65,19 +49,17 @@ SQL> exec UTL_SPADV.STOP_MONITORING(PURGE=>TRUE);
 ```
 
 -----------------------------------------------------------------
-- Displays SPADV statistics in "real time", once monitoring has been "Started":
--- (
+- **Displays SPADV statistics in "real time", once monitoring has been "Started"**:
 ```
--- 		The format: <process name> <idle %> <flow control %> <top event%> <top event name> 
--- 		Mon Mar 29 01:55:07 +0430 2021
--- 		PATH 1 RUN_ID 32 RUN_TIME 2021-MAR-29 01:55:03 CCA Y
--- 		|<R> RINTA 					0.19 148 	0 100% 	0% 
--- 		|<Q> "GGUSER"."OGGQ$RINTA" 	0.19 0.01 	1 
--- 		|<A> OGG$RINTA 				0.19 0.06 	0 			APR 	100% 0% 0% "" 
---															APC 	100% 0% 0% "" 
---															APS(6) 	600% 0% 0% ""
--- 		|<B> NO BOTTLENECK IDENTIFIED
--- )
+		The format: <process name> <idle %> <flow control %> <top event%> <top event name> 
+		Mon Mar 29 01:55:07 +0430 2021
+		PATH 1 RUN_ID 32 RUN_TIME 2021-MAR-29 01:55:03 CCA Y
+		|<R> RINTA 					0.19 148 	0 100% 	0% 
+		|<Q> "GGUSER"."OGGQ$RINTA" 	0.19 0.01 	1 
+		|<A> OGG$RINTA 				0.19 0.06 	0 			APR 	100% 0% 0% "" 
+														APC 	100% 0% 0% "" 
+														APS(6) 	600% 0% 0% ""
+ 		|<B> NO BOTTLENECK IDENTIFIED
 
 ```
 
@@ -159,6 +141,5 @@ done
 SQL> exec UTL_SPADV.STOP_MONITORING(PURGE=>TRUE);
 --SQL> exec UTL_SPADV.STOP_MONITORING;
 ```
-======================================================================================
+
 --------------------------------------------------------------------------------------
-======================================================================================
