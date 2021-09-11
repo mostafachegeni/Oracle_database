@@ -81,7 +81,13 @@ These configuration settings are categorized into 17 different realms as follows
 
 
 16. **Oracle GoldenGate**
-    >   1- Oracle GoldenGate Options
+    >   1-  \
+    >   2-  \
+    >   3-  \
+    >   4-  \
+    >   5-  \
+    >   6-  \
+    >   7-  
 
 
 ------------------------------------------------
