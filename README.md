@@ -5,16 +5,16 @@ In this repository, several configurations for the **Oracle database** are provi
 These configuration settings are categorized into 17 different realms as follows:
 
 1. **Installation**
-    > 1- Install Oracle Database **12cR2** with **ASM** on **Oracle linux 7.4** (with 2 OS users: oracle & grid) \
-    > 2- Install Oracle Database **19c3** with **ASM** on **RHEL 7.6** (with 2 OS users: oracle & grid)
+    > 1- Installation of Oracle Database **12cR2** with **ASM** on **Oracle linux 7.4** (with 2 OS users: oracle & grid) \
+    > 2- Installation of Oracle Database **19c3** with **ASM** on **RHEL 7.6** (with 2 OS users: oracle & grid)
 
 
 2. **User Management**
-    > 1- Identify Users of a Database + Create New Users
+    > 1- Identifying Users of a Database + Creating New Users
 
 
 3. **File & Tablespace Management**
-    > 1- Identify Tablespaces + Create/Drop TBSs + Add New File (**TEMPORARY**/**UNDO**/**PERMANENT** TBSs )
+    > 1- Identifying Tablespaces + Creating/Dropping TBSs + Adding New Files (**TEMPORARY**/**UNDO**/**PERMANENT** TBSs )
 
 
 4. **Monitoring & Performance Tuning**
@@ -49,7 +49,7 @@ These configuration settings are categorized into 17 different realms as follows
 
 8. **PL_SQL**
     >   1- An oracle procedure for Putting the result of query in "Global Temporary Table" \
-    >   2- Guarding Against SQL Injection
+    >   2- Guarding against SQL injection
 
 
 9. **Export-Import**
@@ -61,27 +61,27 @@ These configuration settings are categorized into 17 different realms as follows
 
 
 11. **Indexing**
-    > 
+    >   1- Creating/Dropping an index
 
 
 12. **Trigger**
-
+    >   1- Creating a trigger
 
 
 13. **Materialized View**
-
+    >   1- Creating a materialized view
 
 
 14. **Container Database**
-
+    >   1- Multitenant container database (CDB)
 
 
 15. **Oracle Sharding**
-
+    >   1- Configure Oracle Sharding
 
 
 16. **Oracle GoldenGate**
-
+    >   1- Oracle GoldenGate Options
 
 
 ------------------------------------------------
