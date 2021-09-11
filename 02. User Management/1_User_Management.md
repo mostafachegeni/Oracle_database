@@ -1,7 +1,5 @@
 # User Management
-=========================================================================
--------------------------------------------------------------------------
-=========================================================================
+
 - List of all Schemas:
 ```
 SQL> select username, account_status, default_tablespace, temporary_tablespace, PROFILE, CREATED from dba_users where ACCOUNT_STATUS='OPEN' order by username;
@@ -17,7 +15,7 @@ SQL> SELECT * FROM DBA_ROLE_PRIVS where grantee = '&USER_or_ROLE';	-- List of Gr
 ```
 SQL> SELECT * FROM DBA_PROFILES WHERE PROFILE = '&PROFILE';
 ```
-=======================================
+-------------------------------------------------------------------------
 - List of "all Profiles":
 ```
 SQL> SELECT * FROM DBA_PROFILES ORDER BY PROFILE;
@@ -32,20 +30,20 @@ SQL> SELECT * FROM DBA_TS_QUOTAS;
 ```
 SQL> SELECT * FROM DBA_ROLES;
 ```
-=======================================
+-------------------------------------------------------------------------
 - List of privileges/roles granted to "current session":
 ```
 SQL> SELECT * FROM SESSION_PRIVS ORDER BY privilege;
 SQL> SELECT * FROM SESSION_ROLES;
 ```
-=======================================
+
 - List of all oracle system privileges:
 ```
 SQL> SELECT name FROM system_privilege_map ORDER BY name;
 ```
-=========================================================================
+
 -------------------------------------------------------------------------
-=========================================================================
+-------------------------------------------------------------------------
 - Add/Drop User:
 ```
 SQL> CREATE USER new_user IDENTIFIED BY new_password;
@@ -90,14 +88,14 @@ SQL> ALTER PROFILE myProfile LIMIT PASSWORD_LIFE_TIME unlimited;
 ```
 USERNAME ACCOUNT_STATUS 
 -------- --------------
-SHAHKAR  EXPIRED        
+MYUSER  EXPIRED        
 
 SQL> set long 9999999
 SQL> set line 400
-SQL> select dbms_metadata.get_ddl('USER','SHAHKAR') from dual;
-DBMS_METADATA.GET_DDL('USER','SHAHKAR')
+SQL> select dbms_metadata.get_ddl('USER','MYUSER') from dual;
+DBMS_METADATA.GET_DDL('USER','MYUSER')
 --------------------------------------------------------------------------------
-CREATE USER "SHAHKAR" IDENTIFIED BY VALUES 'S:1B2C583C0C4FC558D3C4165017A5347
+CREATE USER "MYUSER" IDENTIFIED BY VALUES 'S:1B2C583C0C4FC558D3C4165017A5347
 E21F340388E46779C78CA966C95AC;T:C03B2A8E651A086B8435CD6ECEA94117E93C1161AD699F90
 235DDF8E647C079856D2A9130B3CCEAA115B6E644AECBA0B7B500FF8A2F26283914E6248118BCD35
 A6F90BCD780D6DC599675F4DE2092CCA'
@@ -105,10 +103,12 @@ A6F90BCD780D6DC599675F4DE2092CCA'
       TEMPORARY TABLESPACE "TEMP"
       PASSWORD EXPIRE
 
-SQL> Alter user "SHAHKAR" identified by values 'S:1B2C583C0C4FC558D3C4165017A5347E21F340388E46779C78CA966C95AC;T:C03B2A8E651A086B8435CD6ECEA94117E93C1161AD699F90235DDF8E647C079856D2A9130B3CCEAA115B6E644AECBA0B7B500FF8A2F26283914E6248118BCD35A6F90BCD780D6DC599675F4DE2092CCA';
+SQL> Alter user "MYUSER" identified by values 'S:1B2C583C0C4FC558D3C4165017A5347E21F340388E46779C78CA966C95AC;T:C03B2A8E651A086B8435CD6ECEA94117E93C1161AD699F90235DDF8E647C079856D2A9130B3CCEAA115B6E644AECBA0B7B500FF8A2F26283914E6248118BCD35A6F90BCD780D6DC599675F4DE2092CCA';
 User altered.
 ```
-=======================================
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
 - Add/Drop Role:
 ```
 SQL> CREATE ROLE new_role IDENTIFIED BY new_password;
@@ -121,16 +121,18 @@ SQL> DROP ROLE new_role;
 	- RESOURCE 	-> 	(Following system privileges: CREATE CLUSTER, CREATE INDEXTYPE, CREATE OPERATOR, CREATE PROCEDURE, CREATE SEQUENCE, CREATE TABLE, CREATE TRIGGER, CREATE TYPE)
 	- DBA 	 	-> 	(All system privileges WITH ADMIN OPTION)
 ```
-=======================================
+
+-------------------------------------------------------------------------
 - Add/Drop Profile:
 ```
 SQL> CREATE PROFILE new_profile LIMIT SESSIONS_PER_USER 1 IDLE_TIME 30 CONNECT_TIME 600;
 ------------
 SQL> DROP PROFILE new_profile CASCADE;
 ```
-=========================================================================
+
+
 -------------------------------------------------------------------------
-=========================================================================
+-------------------------------------------------------------------------
 - Grant Privileges:
 ```
 -- CONNECT role: "Set Container", and "Create Session" privileges.
@@ -170,9 +172,9 @@ SQL> GRANT SELECT_CATALOG_ROLE to dump;
 SQL> GRANT select any dictionary to dump;
 ```
 
-=========================================================================
+
 -------------------------------------------------------------------------
-=========================================================================
+-------------------------------------------------------------------------
 - Create a User ZABBIX for DBforBIX to access your Oracle Database. You can use the following script:
 ```
   CREATE USER ZABBIX
@@ -230,9 +232,10 @@ NOTE: To create a User (ZABBIX) for DBforBIX with MINIMAL grants you can use the
   GRANT SELECT ON DBA_FREE_SPACE TO ZABBIX;
   GRANT SELECT ON V_$SYSTEM_EVENT TO ZABBIX;
 ```
-=========================================================================
+
+
 -------------------------------------------------------------------------
-=========================================================================
+-------------------------------------------------------------------------
 - Add TALKUSER in TALK project:
 ```
 SQL> select username, account_status, default_tablespace, temporary_tablespace from dba_users where ACCOUNT_STATUS='OPEN' order by username;
@@ -265,6 +268,4 @@ TALKUSER             CONNECT                                                    
 SQL> SELECT * FROM DBA_COL_PRIVS  where grantee = 'TALKUSER';
 no rows selected
 ```
-=========================================================================
--------------------------------------------------------------------------
-=========================================================================
+
