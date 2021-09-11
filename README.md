@@ -57,11 +57,11 @@ These configuration settings are categorized into 17 different realms as follows
 
 
 10. **Partitioning**
-    >   1- 
+    >   1- Creating/Splitting a partitioned table/index
 
 
 11. **Indexing**
-
+    > 
 
 
 12. **Trigger**
