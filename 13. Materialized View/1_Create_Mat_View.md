@@ -1,26 +1,25 @@
 # Create Mat View
 [docs.oracle.com](https://docs.oracle.com/database/121/DWHSG/basicmv.htm#GUID-1F42F25D-739B-4FEE-BEBC-212869D5CD10__i1006694) \
-[oracle-base.com](https://oracle-base.com/articles/misc/materialized-views)
+[oracle-base.com](https://oracle-base.com/articles/misc/materialized-views) \
+[docs.oracle.com](https://docs.oracle.com/database/121/DWHSG/basicmv.htm#DWHSG-GUID-A7AE8E5D-68A5-4519-81EB-252EAAF0ADFF)
 
 
-=======================================================================================================
 -------------------------------------------------------------------------------------------------------
-=======================================================================================================
-- "BUILD clause": \
---    IMMEDIATE : The materialized view is populated immediately. \
---    DEFERRED : The materialized view is populated on the first requested refresh. \
+- "BUILD clause": 
+	>	IMMEDIATE : The materialized view is populated immediately. \
+	>	DEFERRED : The materialized view is populated on the first requested refresh.
 
-- "Refresh Types": \
---    FAST : A fast refresh is attempted. If materialized view logs are not present against the source tables in advance, the creation fails. \
---    COMPLETE : The table segment supporting the materialized view is truncated and repopulated completely using the associated query. \
---    FORCE : A fast refresh is attempted. If one is not possible a complete refresh is performed. \
+- "Refresh Types": 
+	>	FAST : A fast refresh is attempted. If materialized view logs are not present against the source tables in advance, the creation fails. \
+	>	COMPLETE : The table segment supporting the materialized view is truncated and repopulated completely using the associated query. \
+	>	FORCE : A fast refresh is attempted. If one is not possible a complete refresh is performed. 
 
-- "Refresh can be triggered" in two ways: \
---    ON COMMIT : The refresh is triggered by a committed data change in one of the dependent tables. \
---    ON DEMAND : The refresh is initiated by a manual request or a scheduled task. \
+- "Refresh can be triggered" in two ways: 
+	>	ON COMMIT : The refresh is triggered by a committed data change in one of the dependent tables. \
+	>	ON DEMAND : The refresh is initiated by a manual request or a scheduled task. 
 
-
-- Normal:
+-------------------------------------------------------------------------------------------------------
+- **Normal MatView**:
 ```
 CREATE MATERIALIZED VIEW view-name
 BUILD [IMMEDIATE | DEFERRED]
@@ -30,7 +29,8 @@ ON [COMMIT | DEMAND ]
 AS
 SELECT ...;
 ```
-- Pre-Built:
+
+- **Pre-Built MatView**:
 ```
 CREATE MATERIALIZED VIEW view-name
 ON PREBUILT TABLE
@@ -41,9 +41,8 @@ AS
 SELECT ...;
 ```
 
-=======================================================================================================
 -------------------------------------------------------------------------------------------------------
-=======================================================================================================
+-------------------------------------------------------------------------------------------------------
 - List of all MatViews:
 ```
 select * from dba_mviews;
@@ -53,12 +52,11 @@ select * from dba_mviews;
 ```
 SQL> select * from dba_mview_logs;
 ```
-=======================================================================================================
--------------------------------------------------------------------------------------------------------
-=======================================================================================================
-- Materialized View Containing Only "Joins":
-[docs.oracle.com](https://docs.oracle.com/database/121/DWHSG/basicmv.htm#DWHSG-GUID-A7AE8E5D-68A5-4519-81EB-252EAAF0ADFF)
 
+
+-------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------
+- Materialized View Containing Only "Joins":
 
 1.
 ```
@@ -103,12 +101,12 @@ BEGIN
     dbms_mview.refresh(list=>'mosch.detail_sales_mv',method=>'f');
 END;
 ```
-=======================================================================================================
+
+
 -------------------------------------------------------------------------------------------------------
-=======================================================================================================
-- Materialized Views with "Aggregates": \
--- Creating a Materialized View (Total Number and Value of Sales) \
-[docs.oracle.com](https://docs.oracle.com/database/121/DWHSG/basicmv.htm#DWHSG-GUID-A7AE8E5D-68A5-4519-81EB-252EAAF0ADFF)
+-------------------------------------------------------------------------------------------------------
+- Materialized Views with "Aggregates": 
+	>	Creating a Materialized View (Total Number and Value of Sales) 
 
 
 1.
@@ -124,6 +122,7 @@ SQL> CREATE MATERIALIZED VIEW LOG ON sales
 		(prod_id, cust_id, time_id, channel_id, promo_id, quantity_sold, amount_sold)
 		INCLUDING NEW VALUES;
 ```
+
 2.
 ```
 SQL> CREATE MATERIALIZED VIEW product_sales_mv
@@ -140,20 +139,5 @@ SQL> CREATE MATERIALIZED VIEW product_sales_mv
 
 ```
 
-=======================================================================================================
+
 -------------------------------------------------------------------------------------------------------
-=======================================================================================================
-- Creating Materialized Views with "Column Alias Lists":
-
-
-
-
-=======================================================================================================
--------------------------------------------------------------------------------------------------------
-=======================================================================================================
-exec dbms_mview.explain_mview('Create materialized view inquiry.service_matching  build immediate refresh fast enable query rewrite  AS SELECT sub.ID, sub.PROVIDER AS PROVIDER_CODE, sub.classifier, c.IDENTIFICATION_NUMBER, c.customer_type AS IDENTIFICATION_TYPE, s.SERVICE_NUMBER, s.SERVICE_TYPE FROM 	shahkar3.subscription sub,  shahkar3.customer c,  shahkar3.service s WHERE 	sub.CUSTOMER_ID = c.ID  AND	sub.service_id = s.ID');
-
-
-=======================================================================================================
--------------------------------------------------------------------------------------------------------
-=======================================================================================================
