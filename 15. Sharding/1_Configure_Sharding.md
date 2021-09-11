@@ -1,4 +1,4 @@
-# Configure Sharding
+# Configure Oracle Sharding
 [db.geeksinsight.com](http://db.geeksinsight.com/2017/02/20/oracle-sharding-part-2-installating-configuring-shards/) \
 [access.redhat.com](https://access.redhat.com/documentation/en-us/reference_architectures/2017/html-single/deploying_oracle_database_12c_release_2_on_red_hat_enterprise_linux_7/index) \
 [www.uxora.com](https://www.uxora.com/oracle/dba/41-install-oracle-grid-infrastructure-12cr2-for-rac) \
@@ -22,7 +22,7 @@
     Oracle base:		/u01/app/oracle \
     Software Location:	/u01/app/oracle/product/12.2.0/dbhome_1
 
-====================================================
+-------------------------------------------------------------------------------------
 - Shard Catalog:
 ```
 SQL> show parameter name
@@ -46,7 +46,7 @@ pdb_file_name_convert                string
 processor_group_name                 string
 service_names                        string      sh1
 ```
-==========================================
+-------------------------------------------------------------------------------------
 - Shard 1:
 ```
 SQL> show parameter name
@@ -70,7 +70,7 @@ pdb_file_name_convert   string
 processor_group_name    string  
 service_names           string   sh1
 ```
-==========================================
+-------------------------------------------------------------------------------------
 - Shard 2:
 ```
 SQL> show parameter name
@@ -94,9 +94,9 @@ pdb_file_name_convert                string
 processor_group_name                 string
 service_names                        string      sh2
 ```
-====================================================================================
-------------------------------------------------------------------------------------
-====================================================================================
+
+
+-------------------------------------------------------------------------------------
 - Step 1. Install Oracle Software Only 12cR2.
 -- (On shardcat) & (On Shard1) & (On shard2):
 
@@ -105,15 +105,13 @@ service_names                        string      sh2
 
 2. Install oracle database software-only. (user "oracle")
 
-====================================================================================
-------------------------------------------------------------------------------------
-====================================================================================
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
 - Step 2. Install Pluggable database.
 -- (On shardcat):
 
-===============================================================================
--------------------------------------------------------------------------------
-===============================================================================
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
 - Step 3. Install GSM Software at Separate Home.
 -- (On shardcat):
 
@@ -176,9 +174,10 @@ export PATH=$BASE_PATH:$ORACLE_HOME/bin
 press "Enter"
 
 ```
-===============================================================================
--------------------------------------------------------------------------------
-===============================================================================
+
+
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
 - Step 4. Create Environment Setup.
  
 
@@ -190,13 +189,14 @@ press "Enter"
 192.168.96.144      shardcat   shardcat.mosch.co
 
 ```
+
 2. (On shardcat) & (On Shard1) & (On shard2):
 ```
 [oracle@shardcat ~]$ mkdir -p /u01/app/oracle/admin/sdb/adump
 [oracle@shardcat ~]$ mkdir -p /u01/app/oracle/fast_recovery_area
 [oracle@shardcat ~]$ mkdir -p /u01/app/oracle/oradata/sdb/
-
 ```
+
 3. (On shardcat):
 ```
 [oracle@shardcat ~]$ vi /u01/app/oracle/product/12.2.0/gsmhome_1/network/admin/tnsnames.ora
@@ -208,7 +208,7 @@ DBSCAT =
 	)
   )
 
-/*
+
 [oracle@shardcat ~]$ cd $HOME
 
 [oracle@shardcat ~]$ vi shardcat.sh
@@ -223,10 +223,9 @@ export ORACLE_BASE=/u01/app/oracle
 export ORACLE_HOME=/u01/app/oracle/product/12.2.0/GSM 
 export LD_LIBRARY_PATH=$ORACLE_HOME/lib 
 export PATH=$SAVEPATH:$ORACLE_HOME/bin
-*/
 ```
+
 4. (On shard1):
-/*
 ```
 --[oracle@shard1 ~]$ vi shard1.sh
 [oracle@shard1 ~]$ vi .bash_profile
@@ -237,11 +236,9 @@ export ORACLE_SID=sh1
 #export PATH=$SAVEPATH:$ORACLE_HOME/bin
 
 [oracle@shard1 ~]$ . ./.bash_profile
-*/
-
 ```
+
 5. (On shard2):
-/*
 ```
 --[oracle@shard2 ~]$ vi shard1.sh
 [oracle@shard2 ~]$ vi .bash_profile
@@ -252,14 +249,11 @@ export ORACLE_SID=sh2
 #export PATH=$SAVEPATH:$ORACLE_HOME/bin
 
 [oracle@shard2 ~]$ . ./.bash_profile
-*/
 ```
 
-===============================================================================
--------------------------------------------------------------------------------
-===============================================================================
-- Step 5. Prepare SCAT database for Sharding - Prerequisities.
--- (On shardcat):
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+- Step 5. Prepare SCAT database for Sharding - Prerequisities (On shardcat):
 
 1. Login as "oracle":
 ```
@@ -275,6 +269,7 @@ global_names     boolean     FALSE
 instance_name    string      shardcat
 service_names    string      sdb     
 ```
+
 2. 
 ```
 SQL> alter system set db_create_file_dest='/u01/app/oracle/oradata' scope=both;
@@ -289,14 +284,16 @@ SQL> grant inherit privileges on user SYS to GSMADMIN_INTERNAL;
 SQL> execute dbms_xdb.sethttpport(8080);
 SQL> commit;
 ```
+
 3. 
 ```
 SQL> @?/rdbms/admin/prvtrsch.plb
 SQL> exec DBMS_SCHEDULER.SET_AGENT_REGISTRATION_PASS('oracleagent');
 ```
-===============================================================================
--------------------------------------------------------------------------------
-===============================================================================
+
+
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
 - Step 6. Create Shard Catalog in SCAT.
 -- (On shardcat):
 
@@ -309,7 +306,6 @@ Use "set  gsm" command to set GSM for the session.
 Current GSM is set to GSMORA
 ```
 2. 
-/*
 ```
 create shardcatalog -database connect_identifier 
                    [-user username[/password]] 
@@ -326,7 +322,6 @@ create shardcatalog -database connect_identifier
                    [-chunks number] 
                    [-protectmode dg_protection_mode]
                    [-agent_port port]
-*/
 --GDSCTL> delete catalog [-connect [user/[password]@] conn_str] [-force]
 --GDSCTL> delete catalog -connect mygdsadmin/SYS123sys@DBSCAT;
 --GDSCTL> delete catalog;
@@ -335,7 +330,6 @@ Catalog is created
 
 ```
 3. 
-/*
 ```
 add gsm -gsm gsm_name
         -catalog connect_id
@@ -348,7 +342,6 @@ add gsm -gsm gsm_name
        [-endpoint gmsendpoint]
        [-remote_endpoint remote_endpoint]
        [-trace_level level]
-*/
 --GDSCTL> Remove gsm -gsm sharddirector1;
 GDSCTL> add gsm -gsm sharddirector1 -listener 1571 -pwd SYS123sys -catalog DBSCAT -region region1;
 GSM successfully added
@@ -381,7 +374,7 @@ GDSCTL> exit
 
 1. 
 ```
---[oracle@shard1 ~]$ schagent -stop
+[oracle@shard1 ~]$ schagent -stop
 [oracle@shard1 ~]$ schagent -start
 Scheduler agent started using port 15200
 ```
@@ -408,9 +401,9 @@ Agent Registration Password ?
 Oracle Scheduler Agent Registration for 12.2.0.1.2 Agent
 Agent Registration Successful!
 ```
-===============================================================================
--------------------------------------------------------------------------------
-===============================================================================
+
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
 - Step 8. Create Shard Group/Director/Add Shards.
 -- (On shardcat):
 
@@ -430,33 +423,31 @@ Catalog connection is established
 ```
 
 4. 
-/*
 ```
 add shardgroup -shardgroup shardgroup_name 
               [-region region_name] 
               [-shardspace shardspace_name]
               [-deploy_as {PRIMARY | STANDBY | ACTIVE_STANDBY}]
 
-*/
+
 --GDSCTL> Remove shardgroup -shardgroup primary_shardgroup;
 GDSCTL> add shardgroup -shardgroup primary_shardgroup -deploy_as primary -region region1;
 The operation completed successfully
 
 ```
+
 5. 
-/*
 ```
 add {invitednode | invitedsubnet}
 	[-group group_name] 
 	[-catalog catalog_dbname [-user user_name/password]]
 	vncr_id
-*/
 --GDSCTL> Remove invitednode shard1;
 GDSCTL> add invitednode shard1;
 
 ```
+
 6. 
-/*
 ```
 create shard  [{-shardgroup shardgroup_name | –shardspace shardspace_name}] 
                [-deploy_as {primary | standby | active_standby}]
@@ -469,7 +460,6 @@ create shard  [{-shardgroup shardgroup_name | –shardspace shardspace_name}]
                [-serviceuserpassword pwd] 
                [-sys_password]
                [-system_password]
-*/
 --GDSCTL> Remove shard -shardgroup primary_shardgroup;
 GDSCTL> create shard -shardgroup primary_shardgroup -destination shard1 -credential oracle_cred;
 The operation completed successfully
@@ -484,9 +474,9 @@ GDSCTL> create shard -shardgroup primary_shardgroup -destination shard2 -credent
 The operation completed successfully
 DB Unique Name: sh2
 ```
-===============================================================================
--------------------------------------------------------------------------------
-===============================================================================
+
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
 - Step 9. Deploy Shards.
 -- (On shardcat):
 
@@ -511,26 +501,9 @@ Catalog connection is established
 GDSCTL> deploy
 The operation completed successfully
 
-/*
-- NETCA ERROR:
-```
-1. 
-```
-[oracle@shard1 ~]$ grid_env
-[oracle@shard1 ~]$ netca
--> Delete listener...
-```
-2. 
-```
-[oracle@shard1 ~]$ db_env
-[oracle@shard1 ~]$ srvctl status listener
-PRCN-2044 : No listener exists
 
-*/
-```
-===============================================================================
--------------------------------------------------------------------------------
-===============================================================================
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
 - Step 10. Verify Shard Status.
 -- (On shardcat):
 
@@ -597,9 +570,10 @@ Database: "sh2" Registered: Y State: Ok ONS: N. Role: PRIMARY Instances: 1 Regio
    Registered instances:
      sdb%11
 ```
-===============================================================================
--------------------------------------------------------------------------------
-===============================================================================
+
+
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
 - Step 11 : Create "Global Service" using GSDCTL
 -- (shardcat):
 
@@ -645,9 +619,10 @@ Service "test_srv.sdb.oradbcloud" has 2 instance(s). Affinity: ANYWHERE
 ```
 GDSCTL> exit
 ```
-===============================================================================
--------------------------------------------------------------------------------
-===============================================================================
+
+
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
 - Step 12: Create sample "schema" and "Tablespace" set and see that propagate to shard1/shard2
 -- (shardcat):
 
@@ -676,9 +651,10 @@ SQL> alter session enable shard ddl;
 SQL> CREATE TABLESPACE SET TSP_SET_1 using template (datafile size 100m extent management local segment space management auto );
 SQL> CREATE TABLESPACE products_tsp datafile size 100m extent management local uniform size 1m;
 ```
-===============================================================================
--------------------------------------------------------------------------------
-===============================================================================
+
+
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
 - Step 13: Create Shard "Tables" in SCAT Database
 -- (shardcat):
 
@@ -752,9 +728,10 @@ DescrUri VARCHAR2(128),
 LastPrice NUMBER(19,4)
 ) TABLESPACE products_tsp;
 ```
-===============================================================================
--------------------------------------------------------------------------------
-===============================================================================
+
+
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
 - Step 14: Verify Distribution of Tables to shards
 -- (On shardcat) & (On Shard1) & (On shard2):
 
@@ -809,8 +786,7 @@ SQL> col partition_name format a20
 SQL> col tablespace_name format a20
 SQL> SELECT table_name, partition_name, tablespace_name from dba_tab_partitions where tablespace_name like '%SET%' order by table_name;
 ```
-===============================================================================
--------------------------------------------------------------------------------
-===============================================================================
+
+-------------------------------------------------------------------------------------
 
 
