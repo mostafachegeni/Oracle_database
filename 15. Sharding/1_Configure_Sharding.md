@@ -107,13 +107,11 @@ service_names                        string      sh2
 
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
-- Step 2. Install Pluggable database.
--- (On shardcat):
+- Step 2. Install Pluggable database (On shardcat).
 
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
-- Step 3. Install GSM Software at Separate Home.
--- (On shardcat):
+- Step 3. Install GSM Software at Separate Home (On shardcat):
 
 1. Login as "root":
 ```
@@ -730,11 +728,9 @@ LastPrice NUMBER(19,4)
 
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
-- Step 14: Verify Distribution of Tables to shards
--- (On shardcat) & (On Shard1) & (On shard2):
+- Step 14: Verify Distribution of Tables to shards (On shardcat) & (On Shard1) & (On shard2):
 
-1. 
--- (On shardcat):
+1. (On shardcat):
 ```
 [oracle@shardcat ~]$ db_env
 [oracle@shardcat ~]$ sqlplus / as sysdba
@@ -764,8 +760,7 @@ SHARD NUMBER_OF_CHUNKS
 sh1                  6
 sh2                  6
 ```
-2. 
--- (On shard1) The table and tablespace are partitioned and distributed some partitions:
+2. (On shard1) The table and tablespace are partitioned and distributed some partitions:
 ```
 [oracle@shard1 ~]$ db_env
 [oracle@shard1 ~]$ sqlplus / as sysdba
@@ -774,8 +769,7 @@ SQL> col partition_name format a20
 SQL> col tablespace_name format a20
 SQL> SELECT table_name, partition_name, tablespace_name from dba_tab_partitions where tablespace_name like '%SET%' order by table_name;
 ```
-3. 
--- (On shard2) The tables and tablespace are partitioned and distributed some partitions:
+3. (On shard2) The tables and tablespace are partitioned and distributed some partitions:
 ```
 [oracle@shard2 ~]$ db_env
 [oracle@shard2 ~]$ sqlplus / as sysdba
