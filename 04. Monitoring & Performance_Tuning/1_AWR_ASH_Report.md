@@ -1,10 +1,9 @@
-# AWR ASH Report
+# Automatic Workload Repository (AWR) and Active Session History (ASH) Report
 
 [ittutorial.org](https://ittutorial.org/awr-report-automatic-workload-repository-sqlplus-enterprise-manager-and-toad-how-to-generate-in-oracle/) 
 
 
 
--------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
 - Find "Snapshot Interval", "Retention Interval":
 ```
