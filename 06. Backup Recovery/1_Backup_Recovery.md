@@ -240,26 +240,29 @@ Statement processed
 	> 3 -> Recover Database to previous state as follows: \
 
 
-- 0. 
+- 0- 
 ```
 [oracle@prim ~]$ rman target /
 connected to target database: ORCLDB (DBID=2473084788)
 ```
-- 1. Mount Database:
+
+- 1- Mount Database:
 ```
 RMAN> shutdown immediate;
 RMAN> startup mount;
 	Oracle instance started
 	database mounted
 ```
-- 2. Restore Database:
+
+- 2- Restore Database:
 ```
 RMAN> RESTORE DATABASE;
 ...
 channel ORA_DISK_1: restore complete, elapsed time: 00:01:25
 Finished restore at 10-MAY-20
 ```
-- 3. Recover Database:
+
+- 3- Recover Database:
 ```
 RMAN> ALTER DATABASE recover database using backup controlfile until cancel;
 RMAN-00571: ===========================================================
@@ -269,45 +272,22 @@ RMAN-03002: failure of sql statement command at 05/10/2020 19:10:31
 ORA-00279: change 8380127 generated at 05/10/2020 18:15:41 needed for thread 1
 ORA-00289: suggestion : +FRA/ORCLDB/ARCHIVELOG/2020_05_10/thread_1_seq_9.299.1040062607
 ORA-00280: change 8380127 for thread 1 is in sequence #9
-
-/*
-- ERROR:
-ORA-38760: This database instance failed to turn on flashback database
 ```
-- SOLUTION: \
-1. shutdown immediate; \
-2. startup mount; \
-3. ALTER DATABASE FLASHBACK OFF; \
-5. alter databasse open; \
-*/ 
 
-- 4. Cancel Recovery:
+
+- 4- Cancel Recovery:
 ```
 RMAN> alter database recover cancel;
 Statement processed
 ```
-- 5. Reset Logs:
+
+- 5- Reset Logs:
 ```
 RMAN> ALTER DATABASE OPEN RESETLOGS;
 Statement processed
-/*
-ERROR:
-ORA-01113: file 1 needs media recovery
-ORA-01110: data file 1: '+DATA/ORCLDB/DATAFILE/system.259.1040063577'
-```
-- SOLUTION:
-```
-RMAN> ALTER database recover database using backup controlfile;
-RMAN> ALTER database recover cancel;
-RMAN> recover database;
-RMAN> ALTER database RECOVER DATAFILE '+DATA/ORCLDB/DATAFILE/system.259.1040063577';
-RMAN-06067: RECOVER DATABASE required with a backup or created control file
-
-RMAN> ALTER DATABASE OPEN RESETLOGS;
-*/
 ```
 
-- 7. Enable flashback:
+- 6- Enable flashback:
 ```
 SQL> SELECT flashback_on from v$database;
 SQL> ALTER DATABASE FLASHBACK ON;
