@@ -1,8 +1,5 @@
 # File and Tablespace Management
-==================================================================================================
---------------------------------------------------------------------------------------------------
-==================================================================================================
-- Recognize "Tablespaces":
+
 
 - List of "Tablespaces":
 ```
@@ -11,13 +8,13 @@ SQL> select distinct(tablespace_name) from dba_tablespaces;
 - List of "Datafiles":
 ```
 SQL>COLUMN file_name FORMAT A65 
-	SQL>select 	b.tablespace_name 								"TableSpace", 
+	SQL>select 	b.tablespace_name 					"TableSpace", 
 				b.contents                                      "Contents",
-				a.autoextensible 								"Auto_Extention",
-				b.bigfile 										"BigFile",
-				a.file_name 									"File_Name",
-				round(a.Bytes/1024/1024/1024,2) 				"Allocated_Size_GB",
-				round(a.maxbytes/1024/1024/1024,2)				"Max_Size_GB",
+				a.autoextensible 				"Auto_Extention",
+				b.bigfile 					"BigFile",
+				a.file_name 					"File_Name",
+				round(a.Bytes/1024/1024/1024,2) 		"Allocated_Size_GB",
+				round(a.maxbytes/1024/1024/1024,2)		"Max_Size_GB",
 				round((a.maxbytes-a.Bytes)/1024/1024/1024,2)	"Unallocated_Size_GB"
 			from 	dba_data_files a,
 					dba_tablespaces b 
@@ -47,20 +44,20 @@ select 	a.tablespace_name 			"Tablespace_Name",
 				c.Unallocated_Size_GB 		"Unallocated_Size_GB"
 			from 	(
 					select 	tablespace_name,
-							sum(bytes)/1024/1024/1024 	Free_Allocated_Space_GB
+							sum(bytes)/1024/1024/1024 				Free_Allocated_Space_GB
 						from 	dba_free_space
 						group by tablespace_name
 					) 	a, 
 					(
 					select 	tablespace_name,
-							sum(bytes)/1024/1024/1024 	Allocated_Size_GB
+							sum(bytes)/1024/1024/1024 				Allocated_Size_GB
 						from 	dba_data_files
 						group by tablespace_name
 					) 	b,
-					(select a.tablespace_name 									tablespace_name,
+					(select a.tablespace_name 						tablespace_name,
 							round(sum((a.maxbytes-a.Bytes)/1024/1024/1024),2)	Unallocated_Size_GB
 						from 	dba_data_files a,
-								dba_tablespaces b
+							dba_tablespaces b
 						where 	a.tablespace_name=b.tablespace_name 
 						group by a.tablespace_name
 					) 	c
@@ -150,13 +147,13 @@ select  s.sid, s.serial#, NVL(s.username, 'None') username, s.program, r.name UN
 - List of "TempFiles":
 ```
 SQL> COLUMN file_name FORMAT A65 
-SQL> select c.CREATION_TIME 								"CREATION_TIME",
-			b.tablespace_name 								"TableSpace", 
-			a.autoextensible 								"Auto_Extention",
-			b.bigfile 										"BigFile",
-			a.file_name 									"File_Name",
-			round(a.Bytes/1024/1024/1024,2) 				"Allocated_Size_GB",
-			round(a.maxbytes/1024/1024/1024,2)				"Max_Size_GB",
+SQL> select c.CREATION_TIME 						"CREATION_TIME",
+			b.tablespace_name 				"TableSpace", 
+			a.autoextensible 				"Auto_Extention",
+			b.bigfile 					"BigFile",
+			a.file_name 					"File_Name",
+			round(a.Bytes/1024/1024/1024,2) 		"Allocated_Size_GB",
+			round(a.maxbytes/1024/1024/1024,2)		"Max_Size_GB",
 			round((a.maxbytes-a.Bytes)/1024/1024/1024,2)	"Unallocated_Size_GB"
 		from 	dba_temp_files a,
 				dba_tablespaces b,
@@ -189,9 +186,10 @@ SQL> select  a.tablespace_name,
     where a.tablespace_name = b.tablespace_name;
 
 ```
-==================================================================================================
+
+
 --------------------------------------------------------------------------------------------------
-==================================================================================================
+--------------------------------------------------------------------------------------------------
 - Manage "Permanent" Tablespaces:
 
 
@@ -224,9 +222,9 @@ SQL> ALTER TABLESPACE MOSCH_TBS
 		MAXSIZE 32767M;
 ```
 
-==================================================================================================
+
 --------------------------------------------------------------------------------------------------
-==================================================================================================
+--------------------------------------------------------------------------------------------------
 - Manage "Temporary" Tablespaces:
 
 
@@ -267,9 +265,10 @@ SQL> ALTER tablespace temp add tempfile '/u01/app/oracle/oradata/orcl/temp02.dbf
 SQL> alter database tempfile '/u01/app/oracle/oradata/orcl/temp02.dbf' offline;
 SQL> alter database tempfile '/u01/app/oracle/oradata/orcl/temp02.dbf' drop including datafiles;
 ```
-==================================================================================================
+
+
 --------------------------------------------------------------------------------------------------
-==================================================================================================
+--------------------------------------------------------------------------------------------------
 - Manage "RedoLog" Files:
 
 
@@ -308,8 +307,6 @@ SQL> ALTER DATABASE DROP LOGFILE MEMBER '+FRA/ORCLDB/ONLINELOG/group_3.462.10457
 SQL> ALTER DATABASE ADD  STANDBY LOGFILE MEMBER '+FRA' TO GROUP 5;
 SQL> ALTER DATABASE DROP STANDBY LOGFILE MEMBER '+FRA/ORCLDB/ONLINELOG/group_5.462.1045770443';
 ```
-=====================================================================
----------------------------------------------------------------------
-=====================================================================
+
 
 
