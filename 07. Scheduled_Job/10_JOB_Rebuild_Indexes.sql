@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
-CREATE OR REPLACE PROCEDURE INVENTIVE.PROC_REBUILD_UNUSABLE_INDEXES_1
+CREATE OR REPLACE PROCEDURE SCHEMA.PROC_REBUILD_UNUSABLE_INDEXES_1
 IS 
     v_username      varchar2(128 BYTE);
     v_err_code      NUMBER; 
@@ -16,7 +16,7 @@ BEGIN
                             and a.index_name=b.object_name 
                             and a.index_name=c.index_name 
                             and b.subobject_name=c.partition_name 
-                            and (a.owner = 'INVENTIVE')
+                            and (a.owner = 'SCHEMA')
                             and a.partitioned = 'YES'
                             and c.status = 'UNUSABLE'
                         order by created desc
@@ -24,19 +24,19 @@ BEGIN
                     select  a.owner, a.table_name, a.INDEX_NAME, a.index_partition_name,  
                             case when b.populate_status is null then '(null)'
                                  else b.populate_status  end populate_status 
-                            ,INVENTIVE.partition_hv_to_date(a.owner, a.table_name, a.index_partition_name) high_value
+                            ,SCHEMA.partition_hv_to_date(a.owner, a.table_name, a.index_partition_name) high_value
                         from unusable_index_parts a left join v$im_segments b 
                             ON      a.owner=b.owner
                                 AND a.table_name=b.SEGMENT_NAME
                                 AND a.index_partition_name=b.partition_name
                         WHERE   b.POPULATE_STATUS IS NULL 
                             AND (a.table_name like ( 'TBL_%' ) AND a.table_name != 'TBL_PGW')
-                            and INVENTIVE.partition_hv_to_date(a.owner, a.table_name, a.index_partition_name) <> trunc(sysdate+1)
+                            and SCHEMA.partition_hv_to_date(a.owner, a.table_name, a.index_partition_name) <> trunc(sysdate+1)
                             and NOT(
-                                 (a.owner='INVENTIVE' and a.table_name in('TBL_CBS_DATA_REJECT_PRE','TBL_CBS_DATA_REJECT_POST','TBL_VGS') and INVENTIVE.partition_hv_to_date(a.owner, a.table_name, a.index_partition_name)<=trunc(sysdate+1-15)  ) OR 
-                                 (a.owner='INVENTIVE' and a.table_name in('TBL_VGS_PHL','TBL_VGS_KISH','TBL_PGW')                         and INVENTIVE.partition_hv_to_date(a.owner, a.table_name, a.index_partition_name)<=trunc(sysdate+1-15)  ) OR 
-                                 (a.owner='INVENTIVE' and a.table_name in('TBL_CBS_DATA_PRE','TBL_CBS_DATA_POST')                         and INVENTIVE.partition_hv_to_date(a.owner, a.table_name, a.index_partition_name)<=trunc(sysdate+1-15) ) OR 
-                                 (a.owner='INVENTIVE' and a.table_name in('TBL_MOBINNET')                                                 and INVENTIVE.partition_hv_to_date(a.owner, a.table_name, a.index_partition_name)<=trunc(sysdate+1-15) )    
+                                 (a.owner='SCHEMA' and a.table_name in('TBL_CBS_DATA_REJECT_PRE','TBL_CBS_DATA_REJECT_POST','TBL_VGS') and SCHEMA.partition_hv_to_date(a.owner, a.table_name, a.index_partition_name)<=trunc(sysdate+1-15)  ) OR 
+                                 (a.owner='SCHEMA' and a.table_name in('TBL_VGS_PHL','TBL_VGS_KISH','TBL_PGW')                         and SCHEMA.partition_hv_to_date(a.owner, a.table_name, a.index_partition_name)<=trunc(sysdate+1-15)  ) OR 
+                                 (a.owner='SCHEMA' and a.table_name in('TBL_CBS_DATA_PRE','TBL_CBS_DATA_POST')                         and SCHEMA.partition_hv_to_date(a.owner, a.table_name, a.index_partition_name)<=trunc(sysdate+1-15) ) OR 
+                                 (a.owner='SCHEMA' and a.table_name in('TBL_MOBINNET')                                                 and SCHEMA.partition_hv_to_date(a.owner, a.table_name, a.index_partition_name)<=trunc(sysdate+1-15) )    
                             )
                  )
     loop
@@ -48,7 +48,7 @@ BEGIN
                 v_err_code := SQLCODE;
                 v_err_msg  := SUBSTR(SQLERRM, 1, 4000);
                 select user into v_username from dual;
-                INSERT INTO INVENTIVE.TABLE_JOBS_ERR_LOG    (USERNAME, JOB_NAME, RUN_TIMESTAMP, STMT, ERROR_CODE, ERROR_MESSAGE) 
+                INSERT INTO SCHEMA.TABLE_JOBS_ERR_LOG    (USERNAME, JOB_NAME, RUN_TIMESTAMP, STMT, ERROR_CODE, ERROR_MESSAGE) 
                             VALUES                          (v_username, 'JOB_REBUILD_UNUSABLE_INDEXES_1', SYSTIMESTAMP, stmt, v_err_code, v_err_msg);
 
                 COMMIT;
