@@ -10,7 +10,7 @@ SQL> SYS.dbms_stats.set_table_prefs(ownname=>'OWNER', tabname=>'TABLE_NAME', pna
 SQL> SELECT dbms_stats.get_prefs(ownname=>'OWNER', tabname=>'TABLE_NAME', pname => 'INCREMENTAL') FROM DUAL;
 */
 --------------------------------------------------------------------------------
-CREATE OR REPLACE PROCEDURE INVENTIVE.PROC_COPY_TABLE_STALE_STATS 
+CREATE OR REPLACE PROCEDURE SCHEMA.PROC_COPY_TABLE_STALE_STATS 
 IS 
     m_owner         VARCHAR2(128 Byte); 
     m_TABLE_NAME    VARCHAR2(128 Byte); 
@@ -23,18 +23,18 @@ BEGIN
 
     -- All "non-InMemory" Partitions:
     for i in (SELECT    a.owner, a.TABLE_NAME, a.partition_name, a.num_rows, a.global_stats, a.last_analyzed, a.stattype_locked, a.stale_stats, 
-                        INVENTIVE.hv_to_date(a.owner, a.table_name, a.partition_name) high_value,
+                        SCHEMA.hv_to_date(a.owner, a.table_name, a.partition_name) high_value,
                         b.POPULATE_STATUS 
                 FROM dba_tab_statistics a left join v$im_segments b
                     ON      a.owner=b.owner
                         AND a.table_name=b.SEGMENT_NAME
                         AND a.partition_name=b.partition_name
-                WHERE   a.OWNER = 'INVENTIVE' 
+                WHERE   a.OWNER = 'SCHEMA' 
                     AND a.table_name like 'TBL_%'
                     AND (a.stale_stats is NULL)
                     AND (a.partition_name IS NOT NULL)
-                    --AND INVENTIVE.hv_to_date(a.owner, a.table_name, a.partition_name) > sysdate - 60 
-                    --AND INVENTIVE.hv_to_date(a.owner, a.table_name, a.partition_name) < sysdate - 0 
+                    --AND SCHEMA.hv_to_date(a.owner, a.table_name, a.partition_name) > sysdate - 60 
+                    --AND SCHEMA.hv_to_date(a.owner, a.table_name, a.partition_name) < sysdate - 0 
                     --AND (b.POPULATE_STATUS IS NULL)
                 order by high_value desc
                 )
@@ -43,7 +43,7 @@ BEGIN
 
             -- Find a "non-Stale stats" Partitions:
             SELECT  a.owner, a.TABLE_NAME, a.partition_name, 
-                    INVENTIVE.hv_to_date(a.owner, a.table_name, a.partition_name) high_value 
+                    SCHEMA.hv_to_date(a.owner, a.table_name, a.partition_name) high_value 
                 INTO m_owner, m_TABLE_NAME, m_part_name, m_highval
                 FROM dba_tab_statistics a left join v$im_segments b
                     ON      a.owner=b.owner
@@ -53,8 +53,8 @@ BEGIN
                     AND a.table_name = i.table_name 
                     AND (a.stale_stats = 'NO')
                     AND (a.partition_name IS NOT NULL)
-                    AND INVENTIVE.hv_to_date(a.owner, a.table_name, a.partition_name) > sysdate - 60 
-                    AND INVENTIVE.hv_to_date(a.owner, a.table_name, a.partition_name) < sysdate - 0 
+                    AND SCHEMA.hv_to_date(a.owner, a.table_name, a.partition_name) > sysdate - 60 
+                    AND SCHEMA.hv_to_date(a.owner, a.table_name, a.partition_name) < sysdate - 0 
                     AND (b.POPULATE_STATUS IS NULL)
                     AND rownum < 2
                 order by high_value desc;
