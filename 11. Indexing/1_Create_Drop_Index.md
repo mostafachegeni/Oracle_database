@@ -1,9 +1,9 @@
 # Create Drop Index
-=====================================================================================================
+
 -----------------------------------------------------------------------------------------------------
-=====================================================================================================
 - Create a "Local Partitioned" "Unusable" Index:
-- (From 11gR2, database does NOT create an index segment when creating an "unusable" index.)
+	> (From 11gR2, database does NOT create an index segment when creating an "unusable" index.)
+
 ```
 SQL> CREATE INDEX ETL_USER.MSISDN_RECDATE_IND ON ETL_USER.REF_MSC (MSISDN,RECORD_DATE) 
 		TABLESPACE TBS_MSC_INDX 
@@ -22,29 +22,34 @@ SQL> CREATE INDEX ETL_USER.MSISDN_RECDATE_IND ON ETL_USER.REF_MSC (MSISDN,RECORD
 					BUFFER_POOL DEFAULT
 				);
 ```
+
+-----------------------------------------------------------------------------------------------------
 - Change "default Tablespace" for an Index:
 ```
 SQL> ALTER TABLE OWNER.TBL_NAME MODIFY DEFAULT ATTRIBUTES TABLESPACE NEW_TBS;
 ```
 
+-----------------------------------------------------------------------------------------------------
 - "Rebuild" an Index Partition:
 ```
 SQL> ALTER INDEX OWNER.IDX_NAME	REBUILD PARTITION index_partition_name ONLINE PARALLEL 40;
 ```
 
-- Make "Unusable" an Index Partition:
+-----------------------------------------------------------------------------------------------------
+- Make an Index Partition "Unusable":
 ```
 SQL> ALTER INDEX OWNER.IDX_NAME MODIFY PARTITION index_partition_name UNUSABLE;
 ```
 
-- Drop Index:
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+- **Drop an Index**:
 ```
 SQL> DROP INDEX OWNER.IDX_NAME;
 ```
-=====================================================================================================
+
 -----------------------------------------------------------------------------------------------------
-=====================================================================================================
-- DROP a Unique Index:
+- **DROP a Unique Index**:
 
 0.
 ```
@@ -53,8 +58,8 @@ SQL> CREATE UNIQUE INDEX MOSCH.DUPLICATE_CHECKSUM_UNIQUE_CONS ON MOSCH.TEST1 (DU
 1. 
 ```
 SQL> DROP INDEX MOSCH.DUPLICATE_CHECKSUM_UNIQUE_CONS;
-```
 --Error!!!!
+```
 
 2. 
 ```
@@ -68,6 +73,5 @@ SQL> DROP INDEX MOSCH.DUPLICATE_CHECKSUM_UNIQUE_CONS;
 ```
 SQL> ALTER TABLE MOSCH.TEST1 ADD CONSTRAINT DUPLICATE_CHECKSUM_UNIQUE_CONS UNIQUE (DUPLICATE_CHECKSUM) ENABLE NOVALIDATE;
 ```
-=====================================================================================================
 -----------------------------------------------------------------------------------------------------
-=====================================================================================================
+-----------------------------------------------------------------------------------------------------
