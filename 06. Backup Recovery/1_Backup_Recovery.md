@@ -167,14 +167,17 @@ RMAN> DELETE EXPIRED ARCHIVELOG ALL;
 
 -----------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------
-- Scenario 1: \
-	> 1 -> Backup database to a "local directory" at 05/10/20 15:44.\
-	(Backup as compressed backupset incremental level 0 cumulative database TAG 'Database_Inc' include current controlfile plus archivelog section size 100g;) \
-	> 2 -> Change Database. \
-	> 3 -> Delete "DataFiles", \ 
-	>			"Online RedoLogs", \
-	>			"Archived RedoLogs". \
-	> 4 -> Recover Database to previous state as follows: \
+- **Scenario 1**: 
+	> 1- Backup database to a "local directory".
+	> (Backup as compressed backupset incremental level 0 cumulative database TAG 'Database_Inc' include current controlfile plus archivelog section size 100g;) 
+	
+	> 2- Change Database. 
+	
+	> 3- Delete "DataFiles", 
+	> "Online RedoLogs", 
+	> "Archived RedoLogs". 
+
+	> 4- Recover Database to previous state as follows: 
 
 
 
@@ -227,17 +230,21 @@ Statement processed
 
 -----------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------
-- Scenario 2: \
-	> 1 -> Backup database to a "local directory" at 05/10/20 18:16. \
-	(Backup as compressed backupset incremental level 0 cumulative database TAG 'Database_Inc' include current controlfile plus archivelog section size 100g;) \
-	> 2 -> Change Database. \
-	> 3 -> Delete "DataFiles", \ 
-	>			"Online RedoLogs", \
-	>			"Archived RedoLogs", \ 
-	>			"TempFiles", \
-	>			"AutoBackup", \
-	>			"Flashback". \
-	> 3 -> Recover Database to previous state as follows: \
+- **Scenario 2**:
+
+	> 1- Backup database to a "local directory".
+	> (Backup as compressed backupset incremental level 0 cumulative database TAG 'Database_Inc' include current controlfile plus archivelog section size 100g;) 
+
+	> 2- Change Database.
+	
+	> 3- Delete "DataFiles", 
+	>			"Online RedoLogs", 
+	>			"Archived RedoLogs", 
+	>			"TempFiles", 
+	>			"AutoBackup",
+	>			"Flashback". 
+
+	> 4- Recover Database to previous state as follows: 
 
 
 - 0- 
@@ -295,19 +302,23 @@ SQL> ALTER DATABASE FLASHBACK ON;
 
 -----------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------
-- Scenario 3: \
-	> 1 -> Backup database to a "local directory" at 05/10/20 18:16. \
-	(Backup as compressed backupset incremental level 0 cumulative database TAG 'Database_Inc' include current controlfile plus archivelog section size 100g;) \
-	> 2 -> Change Database. \
-	> 3 -> Delete "DataFiles", \ 
-	>			"Online RedoLogs", \
-	>			"Archived RedoLogs", \ 
-	>			"TempFiles", \
-	>			"AutoBackup", \
-	>			"Flashback", \
-	>			"ControlFiles", \
-	>			"SPFILE". \
-	> 3 -> Recover Database to previous state as follows: \
+- **Scenario 3**: 
+
+	> 1- Backup database to a "local directory".
+	> (Backup as compressed backupset incremental level 0 cumulative database TAG 'Database_Inc' include current controlfile plus archivelog section size 100g;)
+	
+	> 2- Change Database.
+	
+	> 3- Delete "DataFiles", 
+	>			"Online RedoLogs", 
+	>			"Archived RedoLogs",  
+	>			"TempFiles", 
+	>			"AutoBackup", 
+	>			"Flashback", 
+	>			"ControlFiles", 
+	>			"SPFILE".
+	
+	> 4- Recover Database to previous state as follows: 
 
 
 
