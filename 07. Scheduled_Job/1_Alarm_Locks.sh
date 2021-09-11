@@ -57,7 +57,7 @@ EOF
 #Send an Email if the file is not empty:
 if [[ -s /export/home/companydba/script/locks_db.sql ]]
 then
-cat /export/home/companydba/script/locks_db.sql | mailx -s "db_ALERT_LOCKS" ext.h.esfandiari@mci.ir
+cat /export/home/companydba/script/locks_db.sql | mailx -s "db_ALERT_LOCKS" email@email.ir
 fi
 
 #Empty File Content by Redirecting to Null:
