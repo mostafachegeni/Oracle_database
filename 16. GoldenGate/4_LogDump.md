@@ -1,9 +1,7 @@
 # LogDump
-==============================================================================================
-----------------------------------------------------------------------------------------------
-==============================================================================================
-- Find the Transaction resulted in "ABENDING" Replicat:
 
+- **To find the transaction that has caused Replicat to "ABEND", follow these steps**:
+----------------------------------------------------------------------------------------------
 
 0. Find "Error" in OGG LogFile (Replicat):
 ```
@@ -23,7 +21,6 @@ INTEGRATED
 Checkpoint Lag       653:55:55 (updated 24:19:54 ago)
 Log Read Checkpoint  File /home/oracle/ogg/dirdat/ps000000096
                      2020-12-27 10:39:31.605582  RBA 23332566
-...
 Current directory    /home/oracle/ogg
 Report file          /home/oracle/ogg/dirrpt/RSH.rpt
 Parameter file       /home/oracle/ogg/dirprm/rsh.prm
@@ -33,11 +30,11 @@ Error log            /home/oracle/ogg/ggserr.log
 
 
 [ ]$ less /home/oracle/ogg/ggserr.log
-...
 2021-01-24T17:56:19.532+0330  INFO    OGG-02333  Oracle GoldenGate Delivery for Oracle, rsh.prm:  Reading /home/oracle/ogg/dirdat/ps000000097, current RBA 3,828, 2 records, m_file_seqno = 97, m_file_rba = 4,071.
 2021-01-24T17:56:19.533+0330  ERROR   OGG-01668  Oracle GoldenGate Delivery for Oracle, rsh.prm:  PROCESS ABENDING.
 
 ```
+
 ----------------------------------------------------------------------------------------------
 1. Open The above Trail:
 ```
@@ -46,40 +43,47 @@ Logdump> open /home/oracle/ogg/dirdat/ps000000097
 Current LogTrail is /home/oracle/ogg/dirdat/ps000000097
 ```
 
+----------------------------------------------------------------------------------------------
 2. Set Output Format: 
 
--- Set trail file header details on: The FILEHEADER contains the header details of the currently opened trail file.
+- Set trail file header details on: The FILEHEADER contains the header details of the currently opened trail file.
 ```
 Logdump> FILEHEADER DETAIL
 ```
--- Record Header: 
+
+- Record Header: 
 ```
 Logdump> GHDR ON
 ```
--- Set Column Details on: It displays the list of columns, their ID, length, Hex values etc.
+
+- Set Column Details on: It displays the list of columns, their ID, length, Hex values etc.
 ```
 Logdump> DETAIL ON
 ```
--- User Token Details: User token is the user-defined information stored in a trail, associated with the table mapping statements. The CSN (SCN in Oracle Database) associated with the transaction is available in this section.
+
+- User Token Details: User token is the user-defined information stored in a trail, associated with the table mapping statements. The CSN (SCN in Oracle Database) associated with the transaction is available in this section.
 ```
 Logdump> USERTOKEN DETAIL
 ```
--- Set length of the record to be displayed: In this case, it is 1024 characters.
+
+- Set length of the record to be displayed: In this case, it is 1024 characters.
 ```
 Logdump> RECLEN 1024
 ```
 
+----------------------------------------------------------------------------------------------
 3. Go to "RBA=3828":
 ```
 Logdump> pos 3828
 Reading forward from RBA 3828
-
 ```
-4. Read Next Record: \
--- NOTE: (This is an "INSER" Transsaction: \
--- 			Data = [2248570110, 1, 2021-01-03:15:26:03.160000000, 020820210103152533623867, 3, 0, 958989675, 324201824, 324201824] \
--- 		--> This Transaction results in "ABENDING" the Replicat RSH. \
--- ) \
+
+----------------------------------------------------------------------------------------------
+4. Read Next Record: 
+> NOTE: This is an "INSER" Transsaction: 
+> Data = [2248570110, 1, 2021-01-03:15:26:03.160000000, 020820210103152533623867, 3, 0, 958989675, 324201824, 324201824] 
+> 		 This Transaction results in "ABENDING" the Replicat RSH. 
+
 ```
 Logdump> n
 ___________________________________________________________________
@@ -115,29 +119,5 @@ Column     7 (x0007), Len    13 (x000d)
 Column     8 (x0008), Len    13 (x000d)
 ___________________________________________________________________
 
----------------------------------------** SUCCESSFULL **--------------------------------------
+```
 
-```
-==============================================================================================
-----------------------------------------------------------------------------------------------
-==============================================================================================
-- Go to "Last record" in TrailFile:
-```
-Logdump> POS last
-```
-- Moving forward or reverse in the trail file:
-```
-Logdump> POS FORWARD
-Logdump> POS REVERSE
-```
-- Skip certain(X) number of records:
-```
-Logdump> SKIP xxx
-```
-- Retrieve the table statistics from one or more trail files:
-```
-Logdump> count detail <trail_file_directory>/aa00000*
-```
-==============================================================================================
-----------------------------------------------------------------------------------------------
-==============================================================================================
