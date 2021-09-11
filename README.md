@@ -24,7 +24,7 @@ These configuration settings are categorized into 17 different realms as follows
 
 
 5. **Archive Log Management**
-    > 
+    > A list of parameters is presented that can be used to configure Archive Logs.
 
 
 6. **Backup Recovery**
