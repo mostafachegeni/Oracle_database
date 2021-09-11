@@ -1,4 +1,4 @@
-# Backup/Recovery for "Data Guard": 
+# Backup/Recovery for "Data Guard"
 
 [docs.oracle.com](https://docs.oracle.com/cd/E18283_01/server.112/e17022/rman.htm#SBYDB04700) 
 
