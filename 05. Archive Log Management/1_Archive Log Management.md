@@ -84,19 +84,15 @@ Specifies whether redo data will be written to a destination,
 	based on the following factors: 
 	
 > **Database Role**:  Whether the database is currently running in the "primary" or the "standby" role. \
-	PRIMARY_ROLE	—> This destination is valid only when the database is running in the "primary" role. \
-	STANDBY_ROLE	—> This destination is valid only when the database is running in the "standby" role. \
-	ALL_ROLES	—> This destination is valid when the database is running in either the "primary" or the "standby" role. 
+		PRIMARY_ROLE	—> This destination is valid only when the database is running in the "primary" role. \
+		STANDBY_ROLE	—> This destination is valid only when the database is running in the "standby" role. \
+		ALL_ROLES	—> This destination is valid when the database is running in either the "primary" or the "standby" role. 
 
 > **Redo Log Type**: 	  Whether "online redo log files", "standby redo log files", or "both" are \
-	  currently being archived on the database at this destination. \
-	ONLINE_LOGFILE	—> This destination is valid only when archiving "online redo log files". \
-	STANDBY_LOGFILE	—> This destination is valid only when archiving "standby redo log files". \
-	ALL_LOGFILES	—> This destination is valid when archiving either "online redo log files" or "standby redo log files". \
- 
-
- 
-
+		currently being archived on the database at this destination. \
+		ONLINE_LOGFILE	—> This destination is valid only when archiving "online redo log files". \
+		STANDBY_LOGFILE	—> This destination is valid only when archiving "standby redo log files". \
+		ALL_LOGFILES	—> This destination is valid when archiving either "online redo log files" or "standby redo log files". \
 
 -------------------------------------------------------------------------------
 
