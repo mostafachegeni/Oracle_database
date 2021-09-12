@@ -10,7 +10,7 @@ These configuration settings are categorized into 17 different realms as follows
 
 
 2. **User Management**
-    > 1- Identifying Users of a Database + Creating New Users
+    > 1- Identifying Users of a Database + Creating New Users + Privilege Management
 
 
 3. **File & Tablespace Management**
