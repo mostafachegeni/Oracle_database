@@ -2,7 +2,7 @@
 
 ------------------------------------------------
 In this repository, several configurations for the **Oracle database** are provided. 
-These configuration settings are categorized into 17 different realms as follows:
+These configuration settings are categorized into 16 different realms as follows:
 
 1. **Installation**
     > 1- Installation of Oracle Database **12cR2** with **ASM** on **Oracle Linux 7.4** (with 2 OS users: oracle & grid) \
