@@ -43,7 +43,7 @@ These configuration settings are categorized into 16 different realms as follows
     >   7- Disk_Usage (DB Scheduled Job): reporting how much DISK is used over time \
     >   8- InMemory_Space (DB Scheduled Job): reporting how much MEMORY is used for storing columnar data (in-memory) over time \
     >   9- Tablespace_Space (DB Scheduled Job): reporting how much free space is available in each tablespace over time \
-    >   10- Rebuild_Indexes (DB Scheduled Job): rebuilding unusable index partitions \
+    >   10- Rebuild_Indexes (DB Scheduled Job): rebuilding unusable index partitions 
 
     >   11- Convert_HighValue_to_Date (DB Function): two Oracle functions which convert the high_value of a table/index partition to date value
 
